@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caivan Mercado</title>
+     
+
+                         <!-- Javascript -->
+
+<script>
+
+    // Esperamos hasta que el navegador haya terminado
+    // de construir el HTML.
+    document.addEventListener('DOMContentLoaded', function() {
+
+
+        // ==========================================================
+        // OBTENER ELEMENTOS DEL HTML
+        // ==========================================================
+
+        // Ahora que el HTML ya fue construido,
+        // podemos buscar las categorías.
+        const categories = document.querySelectorAll('.category');
+
+        // Y también podemos buscar las cards.
+        const cards = document.querySelectorAll('.card');
+
+
+        // ==========================================================
+        // EVENTOS DE LAS CATEGORÍAS
+        // ==========================================================
+
+        // Recorremos todas las categorías.
+        //
+        // Por ejemplo:
+        //
+        // Todo
+        // Hogar
+        // Ropa
+        // Tecnología
+        // Deportes
+        // ...
+        //
+        categories.forEach(category => {
+
+
+            // A cada categoría le asignamos un "escuchador"
+            // que detectará cuando el usuario haga click.
+            category.addEventListener('click', function(event) {
+
+
+                // Como nuestras categorías son <a href="#">
+                // evitamos que el navegador siga el enlace.
+                event.preventDefault();
+
+
+                // ==================================================
+                // OBTENER CATEGORÍA SELECCIONADA
+                // ==================================================
+
+                // "this" representa la categoría sobre la que
+                // el usuario acaba de hacer click.
+                //
+                // Por ejemplo, si hizo click en:
+                //
+                // <a data-category="tecnologia">
+                //
+                // esto nos devuelve:
+                //
+                // "tecnologia"
+                //
+                const selectedCategory = this.dataset.category;
+
+
+                // ==================================================
+                // ACTUALIZAR CATEGORÍA ACTIVA
+                // ==================================================
+
+                // Primero quitamos "active" de todas las categorías.
+                categories.forEach(item => {
+                    item.classList.remove('active');
+                });
+
+
+                                this.classList.add('active');
+
+
+                // ==================================================
+                // FILTRAR LAS CARDS
+                // ==================================================
+
+                // Recorremos todas las tarjetas de productos.
+                cards.forEach(card => {
+
+
+
+                    const cardCategory = card.dataset.category;
+
+
+                    // ==================================================
+                    // COMPARAR
+                    // ==================================================
+
+                    
+                    if (
+                        selectedCategory === 'todo' ||
+                        cardCategory === selectedCategory
+                    ) {
+
+                        card.style.display = '';
+
+                    } else {
+
+                        // Ocultar la tarjeta.
+                        card.style.display = 'none';
+
+                    }
+
+                });
+
+            });
+
+        });
+
+    });
+
+</script>
+    
+
+    <!-- Iconos -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+                                        <!--- CSS--->
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f6f8;
+            color: #252525;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            gap: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1d5f55;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: #e39b35;
+        }
+
+        .search {
+            flex: 1;
+            max-width: 650px;
+            position: relative;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 13px 45px 13px 18px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            background: #f8f8f8;
+        }
+
+        .search i {
+            position: absolute;
+            right: 17px;
+            top: 14px;
+            color: #777;
+        }
+
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .publish-btn {
+            background: #1d5f55;
+            color: white;
+            border: none;
+            padding: 11px 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .publish-btn:hover {
+            background: #174d45;
+        }
+
+        .user {
+            width: 38px;
+            height: 38px;
+            background: #e7eeecc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1d5f55;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================= */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 245px;
+            background: white;
+            border-right: 1px solid #e5e5e5;
+            padding: 28px 18px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 700;
+            margin: 0 12px 15px;
+        }
+
+        .category {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 12px 13px;
+            margin-bottom: 4px;
+            border-radius: 9px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .category:hover {
+            background: #f1f5f4;
+            color: #1d5f55;
+        }
+
+        .category.active {
+            background: #e8f1ef;
+            color: #1d5f55;
+            font-weight: 600;
+        }
+
+        .category-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f2f3f3;
+            font-size: 14px;
+        }
+
+        .category.active .category-icon {
+            background: white;
+        }
+
+        .sidebar-divider {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 22px 8px;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        main {
+            flex: 1;
+            padding: 32px;
+            min-width: 0;
+        }
+
+        .welcome {
+            margin-bottom: 28px;
+        }
+
+        .welcome h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* =========================
+           FEATURED
+        ========================= */
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 17px;
+        }
+
+        .section-header h2 {
+            font-size: 19px;
+        }
+
+        .view-all {
+            color: #1d5f55;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .offers {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+            gap: 20px;
+        }
+
+        /* =========================
+           CARD
+        ========================= */
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e8e8e8;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.07);
+            cursor: pointer;
+        }
+
+        .card-image {
+            height: 170px;
+            background: #e9eceb;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 38px;
+        }
+
+        .offer-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #e39b35;
+            color: white;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .favorite {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-category {
+            color: #1d5f55;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .card-description {
+            color: #777;
+            font-size: 13px;
+            line-height: 1.45;
+            margin-bottom: 13px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+        }
+
+        .price {
+            font-size: 17px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .seller {
+            font-size: 11px;
+            color: #888;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            header {
+                padding: 0 18px;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .publish-btn {
+                display: none;
+            }
+
+            .sidebar {
+                width: 75px;
+                padding: 20px 10px;
+            }
+
+            .sidebar-title,
+            .category span {
+                display: none;
+            }
+
+            .category {
+                justify-content: center;
+                padding: 10px;
+            }
+
+            .category-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .sidebar-divider {
+                margin: 15px 5px;
+            }
+
+            main {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            header {
+                height: auto;
+                padding: 15px;
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                width: 100%;
+            }
+
+            .search {
+                order: 3;
+                max-width: none;
+                width: 100%;
+            }
+
+            .header-actions {
+                position: absolute;
+                right: 15px;
+                top: 15px;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                display: flex;
+                overflow-x: auto;
+                padding: 10px;
+                gap: 5px;
+            }
+
+            .category {
+                flex-direction: column;
+                min-width: 65px;
+                gap: 5px;
+                font-size: 10px;
+            }
+
+            .category span {
+                display: block;
+            }
+
+            .category-icon {
+                width: 34px;
+                height: 34px;
+            }
+
+            .sidebar-title,
+            .sidebar-divider {
+                display: none;
+            }
+
+            main {
+                padding: 20px 15px;
+            }
+
+            .welcome h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+
+                                <!--- Fin del CSS--->
+
+
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Mercado<span>Caivan</span>
+    </div>
+
+    <div class="search">
+        <input type="text"
+               placeholder="¿Qué estás buscando?">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+
+    <div class="header-actions">
+
+        <button class="publish-btn">
+            <i class="fa-solid fa-plus"></i>
+            Publicar oferta
+        </button>
+
+        <div class="user">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="layout">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            Categorías
+        </div>
+
+        <a href="#" class="category active" data-category="todo">
+            <div class="category-icon">
+                <i class="fa-solid fa-border-all"></i>
+            </div>
+            <span>Todo</span>
+        </a>
+
+        <a href="#" class="category" data-category="hogar">
+            <div class="category-icon">
+                <i class="fa-solid fa-couch"></i>
+            </div>
+            <span>Hogar</span>
+        </a>
+
+        <a href="#" class="category" data-category="ropa">
+            <div class="category-icon">
+                <i class="fa-solid fa-shirt"></i>
+            </div>
+            <span>Ropa</span>
+        </a>
+
+        <a href="#" class="category" data-category="tecnologia">
+            <div class="category-icon">
+                <i class="fa-solid fa-mobile-screen"></i>
+            </div>
+            <span>Tecnología</span>
+        </a>
+
+        <a href="#" class="category" data-category="deportes">
+            <div class="category-icon">
+                <i class="fa-solid fa-bicycle"></i>
+            </div>
+            <span>Deportes</span>
+        </a>
+
+        <a href="#" class="category" data-category="se-regala">
+            <div class="category-icon">
+                <i class="fa-solid fa-bicycle"></i>
+            </div>
+            <span>Se regala</span>
+        </a>
+
+        <a href="#" class="category" data-category="comida">
+            <div class="category-icon">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <span>Comida</span>
+        </a>
+
+        <a href="#" class="category" data-category="tiendas">
+            <div class="category-icon">
+                <i class="fa-solid fa-store"></i>
+            </div>
+            <span>Tiendas</span>
+        </a>
+
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-title">
+            Servicios
+        </div>
+
+        <a href="#" class="category" data-category="arriendos">
+            <div class="category-icon">
+                <i class="fa-solid fa-toolbox"></i>
+            </div>
+            <span>Arriendos</span>
+        </a>
+
+        <a href="#" class="category" data-category="reparaciones">
+            <div class="category-icon">
+                <i class="fa-solid fa-hammer"></i>
+            </div>
+            <span>Reparaciones</span>
+        </a>
+
+        <a href="#" class="category" data-category="transporte">
+            <div class="category-icon">
+                <i class="fa-solid fa-truck"></i>
+            </div>
+            <span>Transporte</span>
+        </a>
+/*
+        <a href="#" class="category">
+            <div class="category-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <span>Clases</span>
+        </a> 
+*/
+        <a href="#" class="category" data-category="mascotas">
+            <div class="category-icon">
+                <i class="fa-solid fa-dog"></i>
+            </div>
+            <span>Mascotas</span>
+        </a>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main>
+
+        <div class="welcome">
+            <h1>Ofertas de tus vecinos</h1>
+            <p>
+                Compra, vende, arrienda, presta e intercambia productos y servicios
+                dentro de la comunidad Mirador Caivan.
+            </p>
+        </div>
+
+
+        <div class="section-header">
+/*
+            <h2>Ofertas destacadas</h2>
+
+            <a href="#" class="view-all">
+                Ver todas →
+            </a>
+*/
+
+        </div>
+
+
+        <section class="offers">
+
+                                           <!--- Tarjetas --->
+            <!-- CARD 1 -->
+
+            <article class="card" data-category="hogar">
+
+                <div class="card-image">
+
+                    <span class="offer-tag">
+                        Oferta
+                    </span>
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                    <i class="fa-solid fa-chair"></i>
+
+                </div>
+
+                <div class="card-content">
+
+                    <div class="card-category">
+                        Hogar
+                    </div>
+
+                    <div class="card-title">
+                        Silla de escritorio
+                    </div>
+
+                    <div class="card-description">
+                        Silla ergonómica en excelente estado.
+                    </div>
+
+                    <div class="card-footer">
+
+                        <div class="price">
+                            $35.000
+                        </div>
+
+                        <div class="seller">
+                            Juan · Torre 3
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CARD 2 -->
+
+            <article class="card" data-category="comida">
+
+                <div class="card-image">
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                    <i class="fa-solid fa-cake-candles"></i>
+
+                </div>
+
+                <div class="card-content">
+
+                    <div class="card-category">
+                        Comida
+                    </div>
+
+                    <div class="card-title">
+                        Tortas caseras
+                    </div>
+
+                    <div class="card-description">
+                        Tortas y postres hechos por encargo.
+                    </div>
+
+                    <div class="card-footer">
+
+                        <div class="price">
+                            Desde $12.000
+                        </div>
+
+                        <div class="seller">
+                            María · Torre 1
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CARD 3 -->
+
+            <article class="card" data-category="tecnologia">
+
+                <div class="card-image">
+
+                    <span class="offer-tag">
+                        Nuevo
+                    </span>
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                    <i class="fa-solid fa-laptop"></i>
+
+                </div>
+
+                <div class="card-content">
+
+                    <div class="card-category">
+                        Tecnología
+                    </div>
+
+                    <div class="card-title">
+                        Monitor 24"
+                    </div>
+
+                    <div class="card-description">
+                        Monitor Full HD, perfecto para trabajo o estudio.
+                    </div>
+
+                    <div class="card-footer">
+
+                        <div class="price">
+                            $80.000
+                        </div>
+
+                        <div class="seller">
+                            Pedro · Torre 2
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CARD 4 -->
+
+            <article class="card" data-category="mascotas">
+
+                <div class="card-image">
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                    <i class="fa-solid fa-dog"></i>
+
+                </div>
+
+                <div class="card-content">
+
+                    <div class="card-category">
+                        Mascotas
+                    </div>
+
+                    <div class="card-title">
+                        Paseo de perros
+                    </div>
+
+                    <div class="card-description">
+                        Paseos diarios para perros del condominio.
+                    </div>
+
+                    <div class="card-footer">
+
+                        <div class="price">
+                            $5.000
+                        </div>
+
+                        <div class="seller">
+                            Sofía · Torre 4
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CARD 5 -->
+
+            <article class="card" data-category="reparaciones">
+
+                <div class="card-image">
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                </div>
+
+                <div class="card-content">
+
+                    <div class="card-category">
+                        Reparaciones
+                    </div>
+
+                    <div class="card-title">
+                        Reparaciones eléctricas
+                    </div>
+
+                    <div class="card-description">
+                        Instalaciones y reparaciones menores.
+                    </div>
+
+                    <div class="card-footer">
+
+                        <div class="price">
+                            Consultar
+                        </div>
+
+                        <div class="seller">
+                            Carlos · Torre 2
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CARD 6 -->
+
+            <article class="card" data-category="deportes">
+
+                <div class="card-image">
+
+                    <span class="offer-tag">
+                        Oferta
+                    </span>
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                    <i class="fa-solid fa-bicycle"></i>
+
+                </div>
+
+                <div class="card-content">
+
+                    <div class="card-category">
+                        Deportes
+                    </div>
+
+                    <div class="card-title">
+                        Bicicleta urbana
+                    </div>
+
+                    <div class="card-description">
+                        Bicicleta rodada 26, poco uso.
+                    </div>
+
+                    <div class="card-footer">
+
+                        <div class="price">
+                            $90.000
+                        </div>
+
+                        <div class="seller">
+                            Andrés · Torre 5
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
