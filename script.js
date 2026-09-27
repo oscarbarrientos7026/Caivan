@@ -1,4 +1,4 @@
-<script>
+
 
     // Esperamos hasta que el navegador haya terminado
     // de construir el HTML.
@@ -115,4 +115,4 @@
 
     });
 
-</script>
+
