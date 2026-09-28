@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión - Mercado Caivan</title>
+</head>
+
+<body>
+
+    <h1>Mercado Caivan</h1>
+
+    <h2>Iniciar sesión</h2>
+
+    <button id="google-login">
+        Continuar con Google
+    </button>
+
+
+    <!-- Firebase -->
+    <script type="module">
+
+        // 1. Importamos Firebase
+        import { initializeApp } 
+            from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+        // 2. Importamos el sistema de autenticación
+        import {
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup
+        } 
+        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+        // 3. CONFIGURACIÓN DE TU PROYECTO
+        // Pega aquí el objeto firebaseConfig
+        // que Firebase te acaba de proporcionar.
+
+        const firebaseConfig = {
+            // PEGA AQUÍ TU CONFIGURACIÓN
+        };
+
+
+        // 4. Inicializamos Firebase
+        const app = initializeApp(firebaseConfig);
+
+
+        // 5. Inicializamos Authentication
+        const auth = getAuth(app);
+
+
+        // 6. Creamos el proveedor de Google
+        const provider = new GoogleAuthProvider();
+
+
+        // 7. Buscamos nuestro botón
+        const googleLogin = document.getElementById("google-login");
+
+
+        // 8. Cuando el usuario haga clic...
+        googleLogin.addEventListener("click", async () => {
+
+            try {
+
+                // Abrimos la ventana de Google
+                const result = await signInWithPopup(auth, provider);
+
+                // Obtenemos información del usuario
+                const user = result.user;
+
+                console.log("Usuario conectado:", user);
+
+                // Lo enviamos a nuestra página de usuario
+                window.location.href = "usuario.html";
+
+            } catch (error) {
+
+                console.error("Error al iniciar sesión:", error);
+
+                alert("No se pudo iniciar sesión.");
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
