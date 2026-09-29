@@ -225,6 +225,7 @@
             getDocs,
             deleteDoc,
             doc,
+            updateDoc,
         }
         from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -286,14 +287,8 @@
         const logout =
             document.getElementById("logout");
 
-
-        // ==========================================
-        // 7. USUARIO ACTUAL
-        // ==========================================
-
-        let usuarioActual = null;
         // Icono que corresponde a cada categoría
-            const iconosCategoria = {
+                    const iconosCategoria = {
             
                 hogar: "fa-chair",
             
@@ -315,6 +310,16 @@
             
                 mascotas: "fa-dog"
             };
+
+        // ==========================================
+        // 7. USUARIO ACTUAL
+        // ==========================================
+
+        let usuarioActual = null;
+        let publicacionEditando = null;
+
+                                                        // FUNCIONES
+
 // ==========================================
 // MOSTRAR MIS PUBLICACIONES
 // ==========================================
@@ -469,16 +474,27 @@ async function cargarPublicaciones() {
 
         const cardFooter =
             document.createElement("div");
+        const botonEditar =
+            document.createElement("button");
+            botonEditar.textContent ="Editar";
+            botonEditar.classList.add("edit-button");
+            botonEditar.addEventListener("click",() => {
+                    editarPublicacion(
+                    idPublicacion,
+                    publicacion
+                    );
+                }
+            );
         const botonEliminar =
             document.createElement("button");
         
-        botonEliminar.textContent =
+            botonEliminar.textContent =
             "Eliminar";
         
-        botonEliminar.classList.add(
+            botonEliminar.classList.add(
             "delete-button"
-        );
-        botonEliminar.addEventListener(
+            );
+            botonEliminar.addEventListener(
             "click",
             async () => {
         
@@ -535,6 +551,7 @@ async function cargarPublicaciones() {
 
         cardFooter.appendChild(precio);
         cardFooter.appendChild(vendedor);
+        cardFooter.appendChild(botonEditar);
         cardFooter.appendChild(botonEliminar);
 
         // ==============================
@@ -595,6 +612,57 @@ async function eliminarPublicacion(idPublicacion) {
         );
     }
 }
+
+function editarPublicacion(idPublicacion, publicacion) {
+
+    // Guardamos qué documento estamos editando
+    publicacionEditando =
+        idPublicacion;
+
+
+    // Colocamos los datos de la publicación
+    // dentro del formulario
+
+    document.getElementById("titulo").value =
+        publicacion.titulo;
+
+    document.getElementById("categoria").value =
+        publicacion.categoria;
+
+    document.getElementById("precio").value =
+        publicacion.precio;
+
+    document.getElementById("descripcion").value =
+        publicacion.descripcion;
+
+
+    // Cambiamos el texto del botón
+    const boton =
+        document.querySelector(
+            '#formulario-publicacion button[type="submit"]'
+        );
+
+    if (boton) {
+        boton.textContent =
+            "Guardar cambios";
+    }
+
+
+    // Mensaje para indicar que estamos editando
+    const mensaje =
+        document.getElementById("mensaje");
+
+    mensaje.textContent =
+        "Editando publicación...";
+
+
+    // Llevamos al usuario hacia el formulario
+    document
+        .getElementById("titulo")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+}
         // ==========================================
         // 8. COMPROBAR AUTENTICACIÓN
         // ==========================================
@@ -635,109 +703,153 @@ if (user) {
         // 9. CREAR PUBLICACIÓN
         // ==========================================
 
-        formulario.addEventListener(
-            "submit",
-            async (event) => {
+formulario.addEventListener(
+    "submit",
+    async (event) => {
 
-                // Evita que el formulario
-                // recargue la página.
-
-                event.preventDefault();
+        event.preventDefault();
 
 
-                // ==================================
-                // OBTENER LOS DATOS DEL FORMULARIO
-                // ==================================
+        // ==============================
+        // OBTENER DATOS DEL FORMULARIO
+        // ==============================
 
-                const titulo =
-                    document.getElementById("titulo").value;
+        const titulo =
+            document.getElementById("titulo").value;
 
-                const categoria =
-                    document.getElementById("categoria").value;
+        const categoria =
+            document.getElementById("categoria").value;
 
-                const precio =
-                    Number(
-                        document.getElementById("precio").value
-                    );
+        const precio =
+            Number(
+                document.getElementById("precio").value
+            );
 
-                const descripcion =
-                    document.getElementById("descripcion").value;
-
-
-                // ==================================
-                // COMPROBAR USUARIO
-                // ==================================
-
-                if (!usuarioActual) {
-
-                    mensaje.textContent =
-                        "Debes iniciar sesión.";
-
-                    return;
-                }
+        const descripcion =
+            document.getElementById("descripcion").value;
 
 
-                try {
+        // Comprobar que haya usuario
+        if (!usuarioActual) {
 
-                    // ==================================
-                    // GUARDAR EN FIRESTORE
-                    // ==================================
+            mensaje.textContent =
+                "Debes iniciar sesión.";
 
-                    const docRef = await addDoc(
-                        collection(db, "publicaciones"),
-                        {
+            return;
+        }
 
-                            titulo: titulo,
 
-                            categoria: categoria,
+        try {
 
-                            precio: precio,
+            // =================================
+            // CASO 1: ESTAMOS EDITANDO
+            // =================================
 
-                            descripcion: descripcion,
+            if (publicacionEditando) {
 
-                            // UID del propietario
-
-                            propietario:
-                                usuarioActual.uid,
-
-                            // Fecha de creación
-
-                            fecha:
-                                serverTimestamp()
-                        }
+                const referencia =
+                    doc(
+                        db,
+                        "publicaciones",
+                        publicacionEditando
                     );
 
 
-                    console.log(
-                        "Publicación creada:",
-                        docRef.id
+                await updateDoc(
+                    referencia,
+                    {
+                        titulo: titulo,
+                        categoria: categoria,
+                        precio: precio,
+                        descripcion: descripcion
+                    }
+                );
+
+
+                mensaje.textContent =
+                    "¡Publicación actualizada correctamente!";
+
+
+                // Ya no estamos editando
+                publicacionEditando = null;
+
+
+                // Restaurar formulario
+                formulario.reset();
+
+
+                // Restaurar botón
+                const boton =
+                    formulario.querySelector(
+                        'button[type="submit"]'
                     );
 
+                boton.textContent =
+                    "Publicar";
 
-                    mensaje.textContent =
-                        "¡Publicación creada correctamente!";
+
+                // Recargar tarjetas
+                await cargarPublicaciones();
 
 
-                    // Limpiamos el formulario
-
-                    formulario.reset();
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Error al crear publicación:",
-                        error
-                    );
-
-                    mensaje.textContent =
-                        "No se pudo crear la publicación.";
-
-                }
-
+                return;
             }
-        );
+
+
+            // =================================
+            // CASO 2: NUEVA PUBLICACIÓN
+            // =================================
+
+            const docRef =
+                await addDoc(
+                    collection(
+                        db,
+                        "publicaciones"
+                    ),
+                    {
+                        titulo: titulo,
+                        categoria: categoria,
+                        precio: precio,
+                        descripcion: descripcion,
+                        propietario:
+                            usuarioActual.uid,
+                        fecha:
+                            serverTimestamp()
+                    }
+                );
+
+
+            console.log(
+                "Publicación creada:",
+                docRef.id
+            );
+
+
+            mensaje.textContent =
+                "¡Publicación creada correctamente!";
+
+
+            formulario.reset();
+
+
+            // Recargar las publicaciones
+            await cargarPublicaciones();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Error al guardar:",
+                error
+            );
+
+            mensaje.textContent =
+                "No se pudo guardar la publicación.";
+        }
+
+    }
+);
 
 
         // ==========================================
