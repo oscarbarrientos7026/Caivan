@@ -132,7 +132,7 @@
 
     <h2>Nueva publicación</h2>
 
-    <section id="formulario-publicacion" style="display: none;">
+    <section id="form-publicacion" style="display: none;">
 
         <label>
             Título
@@ -420,7 +420,16 @@ function mostrarFormularioPerfil() {
 }
 
 function mostrarPerfilCompleto(perfil) {
-     document.getElementById("perfil-container").style.display = "none";
+
+    // Ocultamos el formulario de completar perfil
+    document.getElementById(
+        "perfil-container"
+    ).style.display = "none";
+
+    // Mostramos el formulario de publicaciones
+    document.getElementById(
+        "formulario-publicacion"
+    ).style.display = "block";
 }
 
 const perfilFormulario = document.getElementById( "perfil-formulario");
