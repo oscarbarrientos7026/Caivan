@@ -290,94 +290,301 @@
         // ==========================================
 
         let usuarioActual = null;
+        // Icono que corresponde a cada categoría
+            const iconosCategoria = {
+            
+                hogar: "fa-chair",
+            
+                ropa: "fa-shirt",
+            
+                tecnologia: "fa-laptop",
+            
+                deportes: "fa-futbol",
+            
+                comida: "fa-utensils",
+            
+                tiendas: "fa-store",
+            
+                arriendos: "fa-house",
+            
+                reparaciones: "fa-wrench",
+            
+                transporte: "fa-car",
+            
+                mascotas: "fa-dog"
+            };
 // ==========================================
 // MOSTRAR MIS PUBLICACIONES
 // ==========================================
 
 async function cargarPublicaciones() {
 
+    // Buscamos el contenedor donde aparecerán las tarjetas
     const contenedor =
         document.getElementById("mis-publicaciones");
 
-
-    // Limpiamos el contenedor
-
+    // Limpiamos las tarjetas anteriores
     contenedor.innerHTML = "";
 
 
-    // ==========================================
-    // CREAR LA CONSULTA
-    // ==========================================
-
+    // Creamos una consulta a Firestore
+    // equivalente a:
+    // "dame las publicaciones cuyo propietario sea este usuario"
     const consulta = query(
-
         collection(db, "publicaciones"),
-
         where(
             "propietario",
             "==",
             usuarioActual.uid
         )
-
     );
 
 
-    // ==========================================
-    // EJECUTAR LA CONSULTA
-    // ==========================================
-
+    // Ejecutamos la consulta
     const resultados =
         await getDocs(consulta);
 
 
-    // ==========================================
-    // RECORRER LOS RESULTADOS
-    // ==========================================
-
+    // Recorremos cada publicación encontrada
     resultados.forEach((documento) => {
 
+        // Obtenemos los datos de Firestore
         const publicacion =
             documento.data();
 
 
-        // ======================================
-        // CREAR LA TARJETA
-        // ======================================
+        // --------------------------------
+        // TARJETA PRINCIPAL
+        // --------------------------------
 
         const tarjeta =
+            document.createElement("article");
+
+        tarjeta.classList.add("card");
+
+
+        // Guardamos la categoría en data-category
+        // Esto permitirá reutilizar posteriormente
+        // el sistema de filtros de index.html
+        tarjeta.dataset.category =
+            publicacion.categoria;
+
+
+        // --------------------------------
+        // CARD IMAGE
+        // --------------------------------
+
+        const cardImage =
             document.createElement("div");
 
-        tarjeta.classList.add("publicacion");
+        cardImage.classList.add("card-image");
 
 
-        tarjeta.innerHTML = `
+        // Etiqueta "Oferta"
+        const offerTag =
+            document.createElement("span");
 
-            <h3>
-                ${publicacion.titulo}
-            </h3>
+        offerTag.classList.add("offer-tag");
 
-            <p>
-                <strong>Categoría:</strong>
-                ${publicacion.categoria}
-            </p>
-
-            <p>
-                <strong>Precio:</strong>
-                $${publicacion.precio}
-            </p>
-
-            <p>
-                ${publicacion.descripcion}
-            </p>
-
-        `;
+        offerTag.textContent =
+            "Oferta";
 
 
-        // Añadir tarjeta al contenedor
+        // Botón favorito
+        const favorite =
+            document.createElement("button");
 
-        contenedor.appendChild(tarjeta);
+        favorite.classList.add("favorite");
+
+        favorite.innerHTML =
+            '<i class="fa-regular fa-heart"></i>';
+
+
+        // Icono de categoría
+        const icono =
+            document.createElement("i");
+
+        icono.classList.add(
+            "fa-solid"
+        );
+
+        icono.classList.add(
+            iconosCategoria[publicacion.categoria]
+            || "fa-tag"
+        );
+
+
+        // Introducimos los elementos
+        // dentro de card-image
+        cardImage.appendChild(
+            offerTag
+        );
+
+        cardImage.appendChild(
+            favorite
+        );
+
+        cardImage.appendChild(
+            icono
+        );
+
+
+        // --------------------------------
+        // CARD CONTENT
+        // --------------------------------
+
+        const cardContent =
+            document.createElement("div");
+
+        cardContent.classList.add(
+            "card-content"
+        );
+
+
+        // Categoría
+        const categoria =
+            document.createElement("div");
+
+        categoria.classList.add(
+            "card-category"
+        );
+
+        categoria.textContent =
+            publicacion.categoria;
+
+
+        // Título
+        const titulo =
+            document.createElement("div");
+
+        titulo.classList.add(
+            "card-title"
+        );
+
+        titulo.textContent =
+            publicacion.titulo;
+
+
+        // Descripción
+        const descripcion =
+            document.createElement("div");
+
+        descripcion.classList.add(
+            "card-description"
+        );
+
+        descripcion.textContent =
+            publicacion.descripcion;
+
+
+        // --------------------------------
+        // CARD FOOTER
+        // --------------------------------
+
+        const cardFooter =
+            document.createElement("div");
+
+        cardFooter.classList.add(
+            "card-footer"
+        );
+
+
+        // Precio
+        const precio =
+            document.createElement("div");
+
+        precio.classList.add(
+            "price"
+        );
+
+
+        // Formateamos el precio
+        const precioFormateado =
+            new Intl.NumberFormat(
+                "es-CL"
+            ).format(
+                publicacion.precio
+            );
+
+        precio.textContent =
+            "$" + precioFormateado;
+
+
+        // Vendedor
+        const vendedor =
+            document.createElement("div");
+
+        vendedor.classList.add(
+            "seller"
+        );
+
+        vendedor.textContent =
+            usuarioActual.displayName;
+
+
+        // --------------------------------
+        // ARMAMOS EL FOOTER
+        // --------------------------------
+
+        cardFooter.appendChild(
+            precio
+        );
+
+        cardFooter.appendChild(
+            vendedor
+        );
+
+
+        // --------------------------------
+        // ARMAMOS CARD-CONTENT
+        // --------------------------------
+
+        cardContent.appendChild(
+            categoria
+        );
+
+        cardContent.appendChild(
+            titulo
+        );
+
+        cardContent.appendChild(
+            descripcion
+        );
+
+        cardContent.appendChild(
+            cardFooter
+        );
+
+
+        // --------------------------------
+        // ARMAMOS LA TARJETA COMPLETA
+        // --------------------------------
+
+        tarjeta.appendChild(
+            cardImage
+        );
+
+        tarjeta.appendChild(
+            cardContent
+        );
+
+
+        // Finalmente introducimos
+        // la tarjeta en la página
+        contenedor.appendChild(
+            tarjeta
+        );
 
     });
+
+
+    // Si no existen publicaciones
+    if (resultados.empty) {
+
+        contenedor.innerHTML =
+            "<p>Aún no tienes publicaciones.</p>";
+    }
+}
 
 
     // ==========================================
