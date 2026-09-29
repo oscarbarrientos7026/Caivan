@@ -219,7 +219,10 @@
             getFirestore,
             collection,
             addDoc,
-            serverTimestamp
+            serverTimestamp,
+            query,
+            where,
+            getDocs,
         }
         from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -287,7 +290,108 @@
         // ==========================================
 
         let usuarioActual = null;
+// ==========================================
+// MOSTRAR MIS PUBLICACIONES
+// ==========================================
 
+async function cargarPublicaciones() {
+
+    const contenedor =
+        document.getElementById("mis-publicaciones");
+
+
+    // Limpiamos el contenedor
+
+    contenedor.innerHTML = "";
+
+
+    // ==========================================
+    // CREAR LA CONSULTA
+    // ==========================================
+
+    const consulta = query(
+
+        collection(db, "publicaciones"),
+
+        where(
+            "propietario",
+            "==",
+            usuarioActual.uid
+        )
+
+    );
+
+
+    // ==========================================
+    // EJECUTAR LA CONSULTA
+    // ==========================================
+
+    const resultados =
+        await getDocs(consulta);
+
+
+    // ==========================================
+    // RECORRER LOS RESULTADOS
+    // ==========================================
+
+    resultados.forEach((documento) => {
+
+        const publicacion =
+            documento.data();
+
+
+        // ======================================
+        // CREAR LA TARJETA
+        // ======================================
+
+        const tarjeta =
+            document.createElement("div");
+
+        tarjeta.classList.add("publicacion");
+
+
+        tarjeta.innerHTML = `
+
+            <h3>
+                ${publicacion.titulo}
+            </h3>
+
+            <p>
+                <strong>Categoría:</strong>
+                ${publicacion.categoria}
+            </p>
+
+            <p>
+                <strong>Precio:</strong>
+                $${publicacion.precio}
+            </p>
+
+            <p>
+                ${publicacion.descripcion}
+            </p>
+
+        `;
+
+
+        // Añadir tarjeta al contenedor
+
+        contenedor.appendChild(tarjeta);
+
+    });
+
+
+    // ==========================================
+    // SI NO HAY PUBLICACIONES
+    // ==========================================
+
+    if (resultados.empty) {
+
+        contenedor.innerHTML =
+            "<p>Aún no tienes publicaciones.</p>";
+
+    }
+
+}
 
         // ==========================================
         // 8. COMPROBAR AUTENTICACIÓN
