@@ -6,7 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Mi cuenta - Mercado Caivan</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        input,
+        textarea,
+        select {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 15px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 120px;
+        }
+
+        button {
+            padding: 10px 18px;
+            cursor: pointer;
+        }
+
+        .publicacion {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+            max-width: 500px;
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
@@ -14,16 +54,145 @@
 
     <h2>Mi cuenta</h2>
 
-    <!-- Aquí mostraremos los datos del usuario -->
+    <!-- ==========================================
+         INFORMACIÓN DEL USUARIO
+         ========================================== -->
+
     <p id="nombre-usuario">Cargando usuario...</p>
 
     <p id="email-usuario"></p>
 
-    <!-- Botón para cerrar sesión -->
+
+    <!-- ==========================================
+         FORMULARIO DE PUBLICACIÓN
+         ========================================== -->
+
+    <h2>Nueva publicación</h2>
+
+    <form id="form-publicacion">
+
+        <label>
+            Título
+        </label>
+
+        <input
+            type="text"
+            id="titulo"
+            placeholder="Ej: Monitor Samsung 24 pulgadas"
+            required
+        >
+
+
+        <label>
+            Categoría
+        </label>
+
+        <select id="categoria" required>
+
+            <option value="">
+                Selecciona una categoría
+            </option>
+
+            <option value="hogar">
+                Hogar
+            </option>
+
+            <option value="ropa">
+                Ropa
+            </option>
+
+            <option value="tecnologia">
+                Tecnología
+            </option>
+
+            <option value="deportes">
+                Deportes
+            </option>
+
+            <option value="comida">
+                Comida
+            </option>
+
+            <option value="tiendas">
+                Tiendas
+            </option>
+
+            <option value="arriendos">
+                Arriendos
+            </option>
+
+            <option value="reparaciones">
+                Reparaciones
+            </option>
+
+            <option value="transporte">
+                Transporte
+            </option>
+
+            <option value="mascotas">
+                Mascotas
+            </option>
+
+        </select>
+
+
+        <label>
+            Precio
+        </label>
+
+        <input
+            type="number"
+            id="precio"
+            placeholder="80000"
+            min="0"
+            required
+        >
+
+
+        <label>
+            Descripción
+        </label>
+
+        <textarea
+            id="descripcion"
+            placeholder="Describe tu producto..."
+            required
+        ></textarea>
+
+
+        <button type="submit">
+            Publicar
+        </button>
+
+    </form>
+
+
+    <!-- ==========================================
+         MENSAJE DE ESTADO
+         ========================================== -->
+
+    <p id="mensaje"></p>
+
+
+    <!-- ==========================================
+         MIS PUBLICACIONES
+         ========================================== -->
+
+    <h2>Mis publicaciones</h2>
+
+    <div id="mis-publicaciones"></div>
+
+
+    <br>
+
     <button id="logout">
         Cerrar sesión
     </button>
 
+
+    <!-- ==========================================
+         FIREBASE
+         ========================================== -->
 
     <script type="module">
 
@@ -31,15 +200,28 @@
         // 1. IMPORTAMOS FIREBASE
         // ==========================================
 
-        import { initializeApp }
-            from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+        import {
+            initializeApp
+        }
+        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 
         import {
             getAuth,
             onAuthStateChanged,
             signOut
         }
-            from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+        // Firestore
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            serverTimestamp
+        }
+        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
         // ==========================================
@@ -67,14 +249,21 @@
 
 
         // ==========================================
-        // 4. INICIALIZAMOS AUTHENTICATION
+        // 4. AUTENTICACIÓN
         // ==========================================
 
         const auth = getAuth(app);
 
 
         // ==========================================
-        // 5. BUSCAMOS LOS ELEMENTOS HTML
+        // 5. FIRESTORE
+        // ==========================================
+
+        const db = getFirestore(app);
+
+
+        // ==========================================
+        // 6. ELEMENTOS HTML
         // ==========================================
 
         const nombreUsuario =
@@ -83,44 +272,59 @@
         const emailUsuario =
             document.getElementById("email-usuario");
 
+        const formulario =
+            document.getElementById("form-publicacion");
+
+        const mensaje =
+            document.getElementById("mensaje");
+
         const logout =
             document.getElementById("logout");
 
 
         // ==========================================
-        // 6. COMPROBAMOS EL ESTADO DE AUTENTICACIÓN
+        // 7. USUARIO ACTUAL
+        // ==========================================
+
+        let usuarioActual = null;
+
+
+        // ==========================================
+        // 8. COMPROBAR AUTENTICACIÓN
         // ==========================================
 
         onAuthStateChanged(auth, (user) => {
 
-            // --------------------------------------
-            // Si existe un usuario...
-            // --------------------------------------
-
             if (user) {
 
-                console.log("Usuario autenticado:", user);
+                console.log(
+                    "Usuario autenticado:",
+                    user
+                );
 
-                // Mostramos su nombre
+                usuarioActual = user;
+
+
+                // Mostrar nombre
+
                 nombreUsuario.textContent =
                     "Bienvenido, " + user.displayName;
 
-                // Mostramos su correo
+
+                // Mostrar email
+
                 emailUsuario.textContent =
                     user.email;
 
             }
 
-            // --------------------------------------
-            // Si NO existe un usuario...
-            // --------------------------------------
-
             else {
 
-                console.log("No hay usuario autenticado");
+                // Si no está conectado,
+                // volver al login.
 
-                // Lo enviamos nuevamente al login
-                window.location.href = "login.html";
+                window.location.href =
+                    "login.html";
 
             }
 
@@ -128,32 +332,142 @@
 
 
         // ==========================================
-        // 7. CERRAR SESIÓN
+        // 9. CREAR PUBLICACIÓN
         // ==========================================
 
-        logout.addEventListener("click", async () => {
+        formulario.addEventListener(
+            "submit",
+            async (event) => {
 
-            try {
+                // Evita que el formulario
+                // recargue la página.
 
-                await signOut(auth);
+                event.preventDefault();
 
-                // Después de cerrar sesión,
-                // volvemos al login
 
-                window.location.href = "login.html";
+                // ==================================
+                // OBTENER LOS DATOS DEL FORMULARIO
+                // ==================================
+
+                const titulo =
+                    document.getElementById("titulo").value;
+
+                const categoria =
+                    document.getElementById("categoria").value;
+
+                const precio =
+                    Number(
+                        document.getElementById("precio").value
+                    );
+
+                const descripcion =
+                    document.getElementById("descripcion").value;
+
+
+                // ==================================
+                // COMPROBAR USUARIO
+                // ==================================
+
+                if (!usuarioActual) {
+
+                    mensaje.textContent =
+                        "Debes iniciar sesión.";
+
+                    return;
+                }
+
+
+                try {
+
+                    // ==================================
+                    // GUARDAR EN FIRESTORE
+                    // ==================================
+
+                    const docRef = await addDoc(
+                        collection(db, "publicaciones"),
+                        {
+
+                            titulo: titulo,
+
+                            categoria: categoria,
+
+                            precio: precio,
+
+                            descripcion: descripcion,
+
+                            // UID del propietario
+
+                            propietario:
+                                usuarioActual.uid,
+
+                            // Fecha de creación
+
+                            fecha:
+                                serverTimestamp()
+                        }
+                    );
+
+
+                    console.log(
+                        "Publicación creada:",
+                        docRef.id
+                    );
+
+
+                    mensaje.textContent =
+                        "¡Publicación creada correctamente!";
+
+
+                    // Limpiamos el formulario
+
+                    formulario.reset();
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Error al crear publicación:",
+                        error
+                    );
+
+                    mensaje.textContent =
+                        "No se pudo crear la publicación.";
+
+                }
 
             }
+        );
 
-            catch (error) {
 
-                console.error(
-                    "Error al cerrar sesión:",
-                    error
-                );
+        // ==========================================
+        // 10. CERRAR SESIÓN
+        // ==========================================
+
+        logout.addEventListener(
+            "click",
+            async () => {
+
+                try {
+
+                    await signOut(auth);
+
+                    window.location.href =
+                        "login.html";
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Error al cerrar sesión:",
+                        error
+                    );
+
+                }
 
             }
-
-        });
+        );
 
     </script>
 
