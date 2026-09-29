@@ -345,6 +345,67 @@
 
         const formulario =
             document.getElementById("form-publicacion");
+        const perfilFormulario = document.getElementById( "perfil-formulario");
+
+perfilFormulario.addEventListener(
+    "submit",
+    async (event) => {
+        event.preventDefault();
+
+        const nombre =
+            document.getElementById( "nombre" ).value.trim();
+
+
+        const apellido =
+            document.getElementById( "apellido").value.trim();
+
+
+        const whatsapp =
+            document.getElementById( "whatsapp" ).value.trim();
+
+
+        const mensajePerfil =
+            document.getElementById( "mensaje-perfil" );
+
+
+        // Comprobar formato del teléfono
+        if (!/^[0-9]{8}$/.test(whatsapp)) {
+            mensajePerfil.textContent ="Ingresa un número móvil chileno de 8 dígitos.";
+            return;
+        }
+
+
+        try {
+            await setDoc(
+                doc(db,
+                    "usuarios",
+                    usuarioActual.uid
+                ),
+                { nombre: nombre,
+                    apellido: apellido,
+                    whatsapp: whatsapp
+                }
+            );
+
+
+            mensajePerfil.textContent =
+                "Datos guardados correctamente.";
+
+            mostrarPerfilCompleto({
+                nombre: nombre,
+                apellido: apellido,
+                whatsapp: whatsapp
+            });
+        await cargarPublicaciones();
+
+        } catch (error) {
+
+            console.error( "Error al guardar perfil:",error);
+
+            mensajePerfil.textContent ="No se pudieron guardar los datos.";
+        }
+    }
+);
 
         const mensaje =
             document.getElementById("mensaje");
@@ -432,67 +493,7 @@ function mostrarPerfilCompleto(perfil) {
     ).style.display = "block";
 }
 
-const perfilFormulario = document.getElementById( "perfil-formulario");
 
-perfilFormulario.addEventListener(
-    "submit",
-    async (event) => {
-        event.preventDefault();
-
-        const nombre =
-            document.getElementById( "nombre" ).value.trim();
-
-
-        const apellido =
-            document.getElementById( "apellido").value.trim();
-
-
-        const whatsapp =
-            document.getElementById( "whatsapp" ).value.trim();
-
-
-        const mensajePerfil =
-            document.getElementById( "mensaje-perfil" );
-
-
-        // Comprobar formato del teléfono
-        if (!/^[0-9]{8}$/.test(whatsapp)) {
-            mensajePerfil.textContent ="Ingresa un número móvil chileno de 8 dígitos.";
-            return;
-        }
-
-
-        try {
-            await setDoc(
-                doc(db,
-                    "usuarios",
-                    usuarioActual.uid
-                ),
-                { nombre: nombre,
-                    apellido: apellido,
-                    whatsapp: whatsapp
-                }
-            );
-
-
-            mensajePerfil.textContent =
-                "Datos guardados correctamente.";
-
-            mostrarPerfilCompleto({
-                nombre: nombre,
-                apellido: apellido,
-                whatsapp: whatsapp
-            });
-        await cargarPublicaciones();
-
-        } catch (error) {
-
-            console.error( "Error al guardar perfil:",error);
-
-            mensajePerfil.textContent ="No se pudieron guardar los datos.";
-        }
-    }
-);
 // ==========================================
 // MOSTRAR MIS PUBLICACIONES
 // ==========================================
