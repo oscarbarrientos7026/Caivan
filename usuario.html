@@ -66,6 +66,70 @@
 
     <p id="email-usuario"></p>
 
+    <!-- ==========================================
+     DATOS DEL USUARIO
+     ========================================== -->
+
+<section id="datos-usuario" style="display: none;">
+
+    <h2>Mis datos</h2>
+
+    <p>
+        <strong>Nombre:</strong>
+        <span id="datos-nombre"></span>
+    </p>
+
+    <p>
+        <strong>Apellido:</strong>
+        <span id="datos-apellido"></span>
+    </p>
+
+    <p>
+        <strong>WhatsApp:</strong>
+        <span>+569</span><span id="datos-whatsapp"></span>
+    </p>
+
+    <button
+        type="button"
+        id="boton-editar-whatsapp"
+    >
+        Actualizar WhatsApp
+    </button>
+
+    <div
+        id="actualizar-whatsapp-container"
+        style="display: none;"
+    >
+
+        <label for="nuevo-whatsapp">
+            Nuevo número de WhatsApp
+        </label>
+
+        <div>
+            <span>+569</span>
+
+            <input
+                type="tel"
+                id="nuevo-whatsapp"
+                placeholder="12345678"
+                maxlength="8"
+                pattern="[0-9]{8}"
+            >
+        </div>
+
+        <button
+            type="button"
+            id="guardar-whatsapp"
+        >
+            Guardar nuevo número
+        </button>
+
+        <p id="mensaje-whatsapp"></p>
+
+    </div>
+
+</section>
+    
     <section id="perfil-container">
 
     <h2>Completa tu perfil</h2>
@@ -480,17 +544,140 @@ function mostrarFormularioPerfil() {
 
 function mostrarPerfilCompleto(perfil) {
 
-    // Ocultamos el formulario de completar perfil
+    // Ocultar formulario de completar perfil
     document.getElementById(
         "perfil-container"
     ).style.display = "none";
 
-    // Mostramos el formulario de publicaciones
+
+    // Mostrar datos del usuario
+    document.getElementById(
+        "datos-usuario"
+    ).style.display = "block";
+
+
+    // Mostrar nombre
+    document.getElementById(
+        "datos-nombre"
+    ).textContent = perfil.nombre;
+
+
+    // Mostrar apellido
+    document.getElementById(
+        "datos-apellido"
+    ).textContent = perfil.apellido;
+
+
+    // Mostrar WhatsApp
+    document.getElementById(
+        "datos-whatsapp"
+    ).textContent = perfil.whatsapp;
+
+
+    // Mostrar formulario de publicaciones
     document.getElementById(
         "form-publicacion"
     ).style.display = "block";
 }
+const botonEditarWhatsapp =
+    document.getElementById(
+        "boton-editar-whatsapp"
+    );
 
+
+const actualizarWhatsappContainer =
+    document.getElementById(
+        "actualizar-whatsapp-container"
+    );
+
+
+botonEditarWhatsapp.addEventListener(
+    "click",
+    () => {
+
+        actualizarWhatsappContainer.style.display =
+            "block";
+
+    }
+);
+
+const guardarWhatsapp =
+    document.getElementById(
+        "guardar-whatsapp"
+    );
+
+
+guardarWhatsapp.addEventListener(
+    "click",
+    async () => {
+
+        const nuevoWhatsapp =
+            document.getElementById(
+                "nuevo-whatsapp"
+            ).value.trim();
+
+
+        const mensajeWhatsapp =
+            document.getElementById(
+                "mensaje-whatsapp"
+            );
+
+
+        // Comprobar que sean exactamente 8 dígitos
+        if (!/^[0-9]{8}$/.test(nuevoWhatsapp)) {
+
+            mensajeWhatsapp.textContent =
+                "Ingresa un número móvil chileno de 8 dígitos.";
+
+            return;
+        }
+
+
+        try {
+
+            await updateDoc(
+                doc(
+                    db,
+                    "usuarios",
+                    usuarioActual.uid
+                ),
+                {
+                    whatsapp: nuevoWhatsapp
+                }
+            );
+
+
+            // Actualizar el número mostrado
+            document.getElementById(
+                "datos-whatsapp"
+            ).textContent =
+                nuevoWhatsapp;
+
+
+            mensajeWhatsapp.textContent =
+                "Número actualizado correctamente.";
+
+
+            // Limpiar campo
+            document.getElementById(
+                "nuevo-whatsapp"
+            ).value = "";
+
+
+        } catch (error) {
+
+            console.error(
+                "Error al actualizar WhatsApp:",
+                error
+            );
+
+
+            mensajeWhatsapp.textContent =
+                "No se pudo actualizar el número.";
+        }
+
+    }
+);
 
 // ==========================================
 // MOSTRAR MIS PUBLICACIONES
