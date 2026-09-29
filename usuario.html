@@ -66,7 +66,66 @@
 
     <p id="email-usuario"></p>
 
+    <section id="perfil-container">
 
+    <h2>Completa tu perfil</h2>
+
+    <p>
+        Para utilizar Mercado Caivan necesitas
+        completar tus datos de contacto.
+    </p>
+
+    <form id="perfil-formulario">
+
+        <label for="nombre">
+            Nombre
+        </label>
+
+        <input
+            type="text"
+            id="nombre"
+            required
+        >
+
+
+        <label for="apellido">
+            Apellido
+        </label>
+
+        <input
+            type="text"
+            id="apellido"
+            required
+        >
+
+
+        <label for="whatsapp">
+            WhatsApp
+        </label>
+
+        <div>
+            <span>+569</span>
+
+            <input
+                type="tel"
+                id="whatsapp"
+                placeholder="12345678"
+                maxlength="8"
+                pattern="[0-9]{8}"
+                required
+            >
+        </div>
+
+
+        <button type="submit">
+            Guardar datos
+        </button>
+
+        <p id="mensaje-perfil"></p>
+
+    </form>
+
+ </section>
     <!-- ==========================================
          FORMULARIO DE PUBLICACIÓN
          ========================================== -->
@@ -230,6 +289,8 @@
             deleteDoc,
             doc,
             updateDoc,
+            getDoc,
+            setDoc,
         }
         from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -315,15 +376,114 @@
                 mascotas: "fa-dog"
             };
 
-        // ==========================================
-        // 7. USUARIO ACTUAL
-        // ==========================================
+// ==========================================
+// 7. USUARIO ACTUAL
+ // ==========================================
 
         let usuarioActual = null;
         let publicacionEditando = null;
 
                                                         // FUNCIONES
 
+async function comprobarPerfil() {
+
+    const referencia =
+        doc(db,"usuarios", usuarioActual.uid );
+
+    const resultado = await getDoc(referencia);
+
+
+    // =================================
+    // EL PERFIL EXISTE
+    // =================================
+
+    if (resultado.exists()) {
+
+        mostrarPerfilCompleto( resultado.data());
+
+        // Ahora sí puede utilizar
+        // sus publicaciones
+        await cargarPublicaciones();
+        return;
+    }
+
+
+    // =================================
+    // PERFIL NO EXISTE
+    // =================================
+
+    mostrarFormularioPerfil();
+}
+        
+function mostrarFormularioPerfil() {
+    document.getElementById("perfil-container").style.display = "block";
+}
+
+function mostrarPerfilCompleto(perfil) {
+     document.getElementById("perfil-container").style.display = "none";
+}
+
+const perfilFormulario = document.getElementById( "perfil-formulario");
+
+perfilFormulario.addEventListener(
+    "submit",
+    async (event) => {
+        event.preventDefault();
+
+        const nombre =
+            document.getElementById( "nombre" ).value.trim();
+
+
+        const apellido =
+            document.getElementById( "apellido").value.trim();
+
+
+        const whatsapp =
+            document.getElementById( "whatsapp" ).value.trim();
+
+
+        const mensajePerfil =
+            document.getElementById( "mensaje-perfil" );
+
+
+        // Comprobar formato del teléfono
+        if (!/^[0-9]{8}$/.test(whatsapp)) {
+            mensajePerfil.textContent ="Ingresa un número móvil chileno de 8 dígitos.";
+            return;
+        }
+
+
+        try {
+            await setDoc(
+                doc(db,
+                    "usuarios",
+                    usuarioActual.uid
+                ),
+                { nombre: nombre,
+                    apellido: apellido,
+                    whatsapp: whatsapp
+                }
+            );
+
+
+            mensajePerfil.textContent =
+                "Datos guardados correctamente.";
+
+            mostrarPerfilCompleto({
+                nombre: nombre,
+                apellido: apellido,
+                whatsapp: whatsapp
+            });
+        await cargarPublicaciones();
+
+        } catch (error) {
+
+            console.error( "Error al guardar perfil:",error);
+
+            mensajePerfil.textContent ="No se pudieron guardar los datos.";
+        }
+    }
+);
 // ==========================================
 // MOSTRAR MIS PUBLICACIONES
 // ==========================================
@@ -671,36 +831,38 @@ function editarPublicacion(idPublicacion, publicacion) {
         // 8. COMPROBAR AUTENTICACIÓN
         // ==========================================
 
-        onAuthStateChanged(auth, (user) => {
+   onAuthStateChanged(
+    auth, async (user) => {
 
-if (user) {
+        // =================================
+        // NO HAY USUARIO AUTENTICADO
+        // =================================
 
-    console.log(
-        "Usuario autenticado:",
-        user
-    );
-    usuarioActual = user;
+        if (!user) {
+          window.location.href =  "login.html";
 
-    // Mostrar nombre
-    nombreUsuario.textContent =
-        "Bienvenido, " + user.displayName;
+            return;
+        }
 
-    // Mostrar email
-    emailUsuario.textContent =
-        user.email;
 
-    // Cargar publicaciones del usuario
-    cargarPublicaciones();
-}
-            else {
+        // =================================
+        // USUARIO AUTENTICADO
+        // =================================
 
-                // Si no está conectado,
-                // volver al login.
-                window.location.href =
-                    "login.html";
+        usuarioActual = user;
 
-            }
-        });
+        // Mostrar información de Google
+        document.getElementById( "nombre-usuario" ).textContent =user.displayName || "Usuario";
+
+        document.getElementById(  "email-usuario" ).textContent =user.email;
+
+
+        // =================================
+        // COMPROBAR PERFIL
+        // =================================
+        await comprobarPerfil();
+    }
+);
 
 
         // ==========================================
