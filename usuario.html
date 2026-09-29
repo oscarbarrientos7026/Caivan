@@ -399,39 +399,33 @@ async function cargarPublicaciones() {
 
         onAuthStateChanged(auth, (user) => {
 
-            if (user) {
+if (user) {
 
-                console.log(
-                    "Usuario autenticado:",
-                    user
-                );
+    console.log(
+        "Usuario autenticado:",
+        user
+    );
+    usuarioActual = user;
 
-                usuarioActual = user;
+    // Mostrar nombre
+    nombreUsuario.textContent =
+        "Bienvenido, " + user.displayName;
 
+    // Mostrar email
+    emailUsuario.textContent =
+        user.email;
 
-                // Mostrar nombre
-
-                nombreUsuario.textContent =
-                    "Bienvenido, " + user.displayName;
-
-
-                // Mostrar email
-
-                emailUsuario.textContent =
-                    user.email;
-
-            }
-
+    // Cargar publicaciones del usuario
+    cargarPublicaciones();
+}
             else {
 
                 // Si no está conectado,
                 // volver al login.
-
                 window.location.href =
                     "login.html";
 
             }
-
         });
 
 
