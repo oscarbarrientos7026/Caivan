@@ -223,6 +223,8 @@
             query,
             where,
             getDocs,
+            deleteDoc,
+            doc,
         }
         from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -356,7 +358,8 @@ async function cargarPublicaciones() {
 
         const publicacion =
             documento.data();
-
+        const idPublicacion =
+            documento.id;
 
         // ==============================
         // TARJETA
@@ -466,7 +469,33 @@ async function cargarPublicaciones() {
 
         const cardFooter =
             document.createElement("div");
-
+        const botonEliminar =
+            document.createElement("button");
+        
+        botonEliminar.textContent =
+            "Eliminar";
+        
+        botonEliminar.classList.add(
+            "delete-button"
+        );
+        botonEliminar.addEventListener(
+            "click",
+            async () => {
+        
+                const confirmar =
+                    confirm(
+                        "¿Quieres eliminar esta publicación?"
+                    );
+        
+                if (!confirmar) {
+                    return;
+                }
+        
+                await eliminarPublicacion(
+                    idPublicacion
+                );
+            }
+        );
         cardFooter.classList.add(
             "card-footer"
         );
@@ -506,7 +535,7 @@ async function cargarPublicaciones() {
 
         cardFooter.appendChild(precio);
         cardFooter.appendChild(vendedor);
-
+        cardFooter.appendChild(botonEliminar);
 
         // ==============================
         // CONSTRUIR CARD-CONTENT
@@ -532,7 +561,40 @@ async function cargarPublicaciones() {
     });
 }
 
+async function eliminarPublicacion(idPublicacion) {
 
+    try {
+
+        // Localizamos el documento en Firestore
+        const referencia =
+            doc(
+                db,
+                "publicaciones",
+                idPublicacion
+            );
+
+
+        // Lo eliminamos
+        await deleteDoc(referencia);
+
+
+        // Volvemos a cargar las publicaciones
+        // para actualizar la pantalla
+        await cargarPublicaciones();
+
+
+    } catch (error) {
+
+        console.error(
+            "Error al eliminar:",
+            error
+        );
+
+        alert(
+            "No se pudo eliminar la publicación."
+        );
+    }
+}
         // ==========================================
         // 8. COMPROBAR AUTENTICACIÓN
         // ==========================================
