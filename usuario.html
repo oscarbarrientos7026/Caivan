@@ -319,17 +319,13 @@
 
 async function cargarPublicaciones() {
 
-    // Buscamos el contenedor donde aparecerán las tarjetas
     const contenedor =
         document.getElementById("mis-publicaciones");
 
-    // Limpiamos las tarjetas anteriores
     contenedor.innerHTML = "";
 
 
-    // Creamos una consulta a Firestore
-    // equivalente a:
-    // "dame las publicaciones cuyo propietario sea este usuario"
+    // Buscar las publicaciones del usuario actual
     const consulta = query(
         collection(db, "publicaciones"),
         where(
@@ -340,39 +336,44 @@ async function cargarPublicaciones() {
     );
 
 
-    // Ejecutamos la consulta
+    // Ejecutar la consulta
     const resultados =
         await getDocs(consulta);
 
 
-    // Recorremos cada publicación encontrada
+    // Si no hay publicaciones
+    if (resultados.empty) {
+
+        contenedor.innerHTML =
+            "<p>Aún no tienes publicaciones.</p>";
+
+        return;
+    }
+
+
+    // Recorrer las publicaciones encontradas
     resultados.forEach((documento) => {
 
-        // Obtenemos los datos de Firestore
         const publicacion =
             documento.data();
 
 
-        // --------------------------------
-        // TARJETA PRINCIPAL
-        // --------------------------------
+        // ==============================
+        // TARJETA
+        // ==============================
 
         const tarjeta =
             document.createElement("article");
 
         tarjeta.classList.add("card");
 
-
-        // Guardamos la categoría en data-category
-        // Esto permitirá reutilizar posteriormente
-        // el sistema de filtros de index.html
         tarjeta.dataset.category =
             publicacion.categoria;
 
 
-        // --------------------------------
-        // CARD IMAGE
-        // --------------------------------
+        // ==============================
+        // IMAGEN / ICONO
+        // ==============================
 
         const cardImage =
             document.createElement("div");
@@ -380,7 +381,6 @@ async function cargarPublicaciones() {
         cardImage.classList.add("card-image");
 
 
-        // Etiqueta "Oferta"
         const offerTag =
             document.createElement("span");
 
@@ -390,7 +390,6 @@ async function cargarPublicaciones() {
             "Oferta";
 
 
-        // Botón favorito
         const favorite =
             document.createElement("button");
 
@@ -400,13 +399,10 @@ async function cargarPublicaciones() {
             '<i class="fa-regular fa-heart"></i>';
 
 
-        // Icono de categoría
         const icono =
             document.createElement("i");
 
-        icono.classList.add(
-            "fa-solid"
-        );
+        icono.classList.add("fa-solid");
 
         icono.classList.add(
             iconosCategoria[publicacion.categoria]
@@ -414,24 +410,14 @@ async function cargarPublicaciones() {
         );
 
 
-        // Introducimos los elementos
-        // dentro de card-image
-        cardImage.appendChild(
-            offerTag
-        );
-
-        cardImage.appendChild(
-            favorite
-        );
-
-        cardImage.appendChild(
-            icono
-        );
+        cardImage.appendChild(offerTag);
+        cardImage.appendChild(favorite);
+        cardImage.appendChild(icono);
 
 
-        // --------------------------------
-        // CARD CONTENT
-        // --------------------------------
+        // ==============================
+        // CONTENIDO
+        // ==============================
 
         const cardContent =
             document.createElement("div");
@@ -441,7 +427,6 @@ async function cargarPublicaciones() {
         );
 
 
-        // Categoría
         const categoria =
             document.createElement("div");
 
@@ -453,7 +438,6 @@ async function cargarPublicaciones() {
             publicacion.categoria;
 
 
-        // Título
         const titulo =
             document.createElement("div");
 
@@ -465,7 +449,6 @@ async function cargarPublicaciones() {
             publicacion.titulo;
 
 
-        // Descripción
         const descripcion =
             document.createElement("div");
 
@@ -477,9 +460,9 @@ async function cargarPublicaciones() {
             publicacion.descripcion;
 
 
-        // --------------------------------
-        // CARD FOOTER
-        // --------------------------------
+        // ==============================
+        // FOOTER
+        // ==============================
 
         const cardFooter =
             document.createElement("div");
@@ -489,16 +472,12 @@ async function cargarPublicaciones() {
         );
 
 
-        // Precio
         const precio =
             document.createElement("div");
 
-        precio.classList.add(
-            "price"
-        );
+        precio.classList.add("price");
 
 
-        // Formateamos el precio
         const precioFormateado =
             new Intl.NumberFormat(
                 "es-CL"
@@ -510,7 +489,6 @@ async function cargarPublicaciones() {
             "$" + precioFormateado;
 
 
-        // Vendedor
         const vendedor =
             document.createElement("div");
 
@@ -522,60 +500,37 @@ async function cargarPublicaciones() {
             usuarioActual.displayName;
 
 
-        // --------------------------------
-        // ARMAMOS EL FOOTER
-        // --------------------------------
+        // ==============================
+        // CONSTRUIR FOOTER
+        // ==============================
 
-        cardFooter.appendChild(
-            precio
-        );
-
-        cardFooter.appendChild(
-            vendedor
-        );
+        cardFooter.appendChild(precio);
+        cardFooter.appendChild(vendedor);
 
 
-        // --------------------------------
-        // ARMAMOS CARD-CONTENT
-        // --------------------------------
+        // ==============================
+        // CONSTRUIR CARD-CONTENT
+        // ==============================
 
-        cardContent.appendChild(
-            categoria
-        );
-
-        cardContent.appendChild(
-            titulo
-        );
-
-        cardContent.appendChild(
-            descripcion
-        );
-
-        cardContent.appendChild(
-            cardFooter
-        );
+        cardContent.appendChild(categoria);
+        cardContent.appendChild(titulo);
+        cardContent.appendChild(descripcion);
+        cardContent.appendChild(cardFooter);
 
 
-        // --------------------------------
-        // ARMAMOS LA TARJETA COMPLETA
-        // --------------------------------
+        // ==============================
+        // CONSTRUIR TARJETA
+        // ==============================
 
-        tarjeta.appendChild(
-            cardImage
-        );
-
-        tarjeta.appendChild(
-            cardContent
-        );
+        tarjeta.appendChild(cardImage);
+        tarjeta.appendChild(cardContent);
 
 
-        // Finalmente introducimos
-        // la tarjeta en la página
-        contenedor.appendChild(
-            tarjeta
-        );
+        // Añadir tarjeta a la página
+        contenedor.appendChild(tarjeta);
 
     });
+}
 
 
     // Si no existen publicaciones
