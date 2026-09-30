@@ -1308,6 +1308,18 @@ formulario.addEventListener(
 
         }
 
+        if (imagenBase64) {
+
+            console.log(
+                "Tamaño de imagen:",
+                Math.round(
+                    imagenBase64.length / 1024
+                ),
+                "KB"
+            );
+
+        }
+
         const titulo =
             document.getElementById("titulo").value;
 
