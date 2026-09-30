@@ -208,6 +208,15 @@
             placeholder="Ej: Monitor Samsung 24 pulgadas"
             required
         >
+        <label for="imagen">
+        Imagen
+        </label>
+
+        <input
+            type="file"
+            id="imagen"
+            accept="image/*"
+        >
 
 
         <label>
@@ -1071,6 +1080,72 @@ console.log(
         // 9. CREAR PUBLICACIÓN
         // ==========================================
 
+function reducirImagen(archivo) {
+
+    return new Promise((resolve, reject) => {
+
+        const imagen =
+            new Image();
+
+        const lector =
+            new FileReader();
+
+
+        lector.onload = (evento) => {
+
+            imagen.onload = () => {
+
+                console.log(
+                    "Resolución original:",
+                    imagen.width,
+                    "x",
+                    imagen.height
+                );
+
+
+                // Aquí posteriormente
+                // reduciremos la imagen
+                // si supera 720 px.
+
+
+                resolve(archivo);
+
+            };
+
+
+            imagen.onerror = () => {
+
+                reject(
+                    new Error(
+                        "No se pudo leer la imagen."
+                    )
+                );
+
+            };
+
+
+            imagen.src =
+                evento.target.result;
+
+        };
+
+
+        lector.onerror = () => {
+
+            reject(
+                new Error(
+                    "No se pudo leer el archivo."
+                )
+            );
+
+        };
+
+
+        lector.readAsDataURL(archivo);
+
+    });
+}
+
 formulario.addEventListener(
     "submit",
     async (event) => {
@@ -1081,6 +1156,14 @@ formulario.addEventListener(
         // ==============================
         // OBTENER DATOS DEL FORMULARIO
         // ==============================
+        const archivo =
+            document.getElementById("imagen").files[0];
+
+        if (archivo) {
+
+         await reducirImagen(archivo);
+
+        }
 
         const titulo =
             document.getElementById("titulo").value;
