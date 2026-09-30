@@ -766,7 +766,7 @@ async function cargarPublicaciones() {
         offerTag.classList.add("offer-tag");
 
         offerTag.textContent =
-            "Oferta";
+            "";
 
 
         const favorite =
@@ -791,7 +791,34 @@ async function cargarPublicaciones() {
 
         cardImage.appendChild(offerTag);
         cardImage.appendChild(favorite);
-        cardImage.appendChild(icono);
+
+
+        // ==============================
+        // MOSTRAR IMAGEN O ICONO
+        // ==============================
+
+        if (publicacion.imagen) {
+
+            const foto =
+                document.createElement("img");
+
+            foto.src =
+                publicacion.imagen;
+
+            foto.alt =
+                publicacion.titulo;
+
+            cardImage.appendChild(
+                foto
+            );
+
+        } else {
+
+            cardImage.appendChild(
+                icono
+            );
+
+        }
 
 
         // ==============================
