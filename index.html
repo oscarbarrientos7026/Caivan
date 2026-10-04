@@ -495,6 +495,125 @@
 
         });
 
+        
+    // ==============================
+    // ELEMENTOS DEL MODAL
+    // ==============================
+
+    const modalDetalle =
+        document.getElementById(
+            "modal-detalle"
+        );
+
+    const detalleContenido =
+        document.getElementById(
+            "detalle-contenido"
+        );
+
+    const cerrarDetalle =
+        document.getElementById(
+            "cerrar-detalle"
+        );
+
+
+    // ==============================
+    // TODAS LAS TARJETAS
+    // ==============================
+
+    const cards =
+        document.querySelectorAll(
+            ".card"
+        );
+
+
+    // ==============================
+    // ABRIR DETALLE
+    // ==============================
+
+    cards.forEach((card) => {
+
+        card.addEventListener(
+            "click",
+            (evento) => {
+
+                // Si el clic fue sobre un botón,
+                // no abrimos el detalle.
+                if (
+                    evento.target.closest(
+                        "button"
+                    )
+                ) {
+                    return;
+                }
+
+
+                // Crear una copia de la tarjeta
+                const tarjetaClon =
+                    card.cloneNode(true);
+
+
+                // Vaciar contenido anterior
+                detalleContenido.innerHTML =
+                    "";
+
+
+                // Insertar la copia
+                detalleContenido.appendChild(
+                    tarjetaClon
+                );
+
+
+                // Mostrar modal
+                modalDetalle.style.display =
+                    "flex";
+
+            }
+        );
+
+    });
+
+
+    // ==============================
+    // CERRAR CON X
+    // ==============================
+
+    cerrarDetalle.addEventListener(
+        "click",
+        () => {
+
+            modalDetalle.style.display =
+                "none";
+
+            detalleContenido.innerHTML =
+                "";
+
+        }
+    );
+
+
+    // ==============================
+    // CERRAR HACIENDO CLIC AFUERA
+    // ==============================
+
+    modalDetalle.addEventListener(
+        "click",
+        (evento) => {
+
+            if (
+                evento.target === modalDetalle
+            ) {
+
+                modalDetalle.style.display =
+                    "none";
+
+                detalleContenido.innerHTML =
+                    "";
+
+            }
+
+        }
+    );
+
     </script>
 
     <!-- ==============================
