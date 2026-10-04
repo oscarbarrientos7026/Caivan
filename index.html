@@ -473,53 +473,6 @@
 </div>
     <script>
 
-        const cards =
-            document.querySelectorAll(".card");
-
-
-        cards.forEach((card) => {
-
-            card.addEventListener("click", (evento) => {
-
-                // Si hacemos clic en un botón,
-                // no expandimos la tarjeta.
-                if (
-                    evento.target.closest("button")
-                ) {
-                    return;
-                }
-
-                card.classList.toggle("expanded");
-
-            });
-
-        });
-
-        
-    // ==============================
-    // ELEMENTOS DEL MODAL
-    // ==============================
-
-    const modalDetalle =
-        document.getElementById(
-            "modal-detalle"
-        );
-
-    const detalleContenido =
-        document.getElementById(
-            "detalle-contenido"
-        );
-
-    const cerrarDetalle =
-        document.getElementById(
-            "cerrar-detalle"
-        );
-
-
-    // ==============================
-    // TODAS LAS TARJETAS
-    // ==============================
-
     const cards =
         document.querySelectorAll(
             ".card"
