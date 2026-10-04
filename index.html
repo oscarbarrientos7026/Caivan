@@ -471,6 +471,30 @@
     </main>
 
 </div>
+    <script>
 
+        const cards =
+            document.querySelectorAll(".card");
+
+
+        cards.forEach((card) => {
+
+            card.addEventListener("click", (evento) => {
+
+                // Si hacemos clic en un botón,
+                // no expandimos la tarjeta.
+                if (
+                    evento.target.closest("button")
+                ) {
+                    return;
+                }
+
+                card.classList.toggle("expanded");
+
+            });
+
+        });
+
+    </script>
 </body>
 </html>

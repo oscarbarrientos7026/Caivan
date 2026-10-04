@@ -750,7 +750,7 @@ async function cargarPublicaciones() {
             document.createElement("article");
 
         tarjeta.classList.add("card");
-        
+
         tarjeta.addEventListener("click", (evento) => {
 
             // Si hacemos clic en un botón,
@@ -775,7 +775,6 @@ async function cargarPublicaciones() {
 
         cardImage.classList.add("card-image");
 
-
         const offerTag =
             document.createElement("span");
 
@@ -784,7 +783,6 @@ async function cargarPublicaciones() {
         offerTag.textContent =
             "";
 
-
         const favorite =
             document.createElement("button");
 
@@ -792,7 +790,6 @@ async function cargarPublicaciones() {
 
         favorite.innerHTML =
             '<i class="fa-regular fa-heart"></i>';
-
 
         const icono =
             document.createElement("i");
@@ -804,10 +801,8 @@ async function cargarPublicaciones() {
             || "fa-tag"
         );
 
-
         cardImage.appendChild(offerTag);
         cardImage.appendChild(favorite);
-
 
         // ==============================
         // MOSTRAR IMAGEN O ICONO
