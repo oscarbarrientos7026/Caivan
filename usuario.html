@@ -750,7 +750,18 @@ async function cargarPublicaciones() {
             document.createElement("article");
 
         tarjeta.classList.add("card");
+        
+        tarjeta.addEventListener("click", (evento) => {
 
+            // Si hacemos clic en un botón,
+            // no queremos expandir la tarjeta.
+            if (evento.target.closest("button")) {
+                return;
+            }
+
+            tarjeta.classList.toggle("expanded");
+
+        });
         tarjeta.dataset.category =
             publicacion.categoria;
 

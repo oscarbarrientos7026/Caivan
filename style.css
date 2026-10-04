@@ -331,6 +331,13 @@
             font-size: 11px;
             color: #888;
         }
+        .card.expanded {
+            transform: scale(1.02);
+        }
+
+        .card.expanded .card-image {
+            height: 320px;
+        }
 
         /* =========================
            RESPONSIVE
