@@ -182,7 +182,7 @@
         </div>
 
 
-        <section class="offers">
+        <section id="contenedor-publicaciones" class="offers">
 
                                            <!--- Tarjetas --->
             <!-- CARD 1 -->
@@ -663,20 +663,113 @@
             );
 
 
-        resultados.forEach(
-            (documento) => {
+        resultados.forEach((documento) => {
 
-                const publicacion =
-                    documento.data();
+            const publicacion = documento.data();
+
+            // ==============================
+            // TARJETA
+            // ==============================
+
+            const tarjeta = document.createElement("article");
+            tarjeta.classList.add("card");
+            tarjeta.dataset.category = publicacion.categoria;
 
 
-                console.log(
-                    "Publicación autorizada:",
-                    publicacion
-                );
+            // ==============================
+            // IMAGEN
+            // ==============================
 
+            const cardImage = document.createElement("div");
+            cardImage.classList.add("card-image");
+
+            if (publicacion.imagen) {
+
+                const foto = document.createElement("img");
+
+                foto.src = publicacion.imagen;
+                foto.alt = publicacion.titulo;
+
+                cardImage.appendChild(foto);
             }
-        );
+
+
+            // ==============================
+            // CONTENIDO
+            // ==============================
+
+            const cardContent = document.createElement("div");
+            cardContent.classList.add("card-content");
+
+
+            // Categoría
+
+            const cardCategory = document.createElement("div");
+            cardCategory.classList.add("card-category");
+            cardCategory.textContent = publicacion.categoria;
+
+
+            // Título
+
+            const cardTitle = document.createElement("div");
+            cardTitle.classList.add("card-title");
+            cardTitle.textContent = publicacion.titulo;
+
+
+            // Descripción
+
+            const cardDescription = document.createElement("div");
+            cardDescription.classList.add("card-description");
+            cardDescription.textContent = publicacion.descripcion;
+
+
+            // ==============================
+            // FOOTER
+            // ==============================
+
+            const cardFooter = document.createElement("div");
+            cardFooter.classList.add("card-footer");
+
+
+            // Precio
+
+            const price = document.createElement("div");
+            price.classList.add("price");
+            price.textContent = publicacion.precio;
+
+
+            // Propietario
+
+            const seller = document.createElement("div");
+            seller.classList.add("seller");
+            seller.textContent = "Usuario de Mercado Caivan";
+
+
+            // ==============================
+            // CONSTRUCCIÓN
+            // ==============================
+
+            cardFooter.appendChild(price);
+            cardFooter.appendChild(seller);
+
+            cardContent.appendChild(cardCategory);
+            cardContent.appendChild(cardTitle);
+            cardContent.appendChild(cardDescription);
+            cardContent.appendChild(cardFooter);
+
+            tarjeta.appendChild(cardImage);
+            tarjeta.appendChild(cardContent);
+
+
+            // ==============================
+            // INSERTAR EN LA PÁGINA
+            // ==============================
+
+            const contenedor = document.getElementById("contenedor-publicaciones");
+
+            contenedor.appendChild(tarjeta);
+
+        });
 
     }
 
