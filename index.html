@@ -630,6 +630,16 @@
             seller.classList.add("seller");
             seller.textContent = "Usuario de Mercado Caivan";
 
+            // Boton
+
+            const botonWhatsapp = document.createElement("a");
+
+            botonWhatsapp.classList.add("boton-whatsapp");
+            botonWhatsapp.href ="https://wa.me/569" + publicacion.whatsapp;
+
+            botonWhatsapp.target = "_blank";
+
+            botonWhatsapp.innerHTML ='<i class="fa-brands fa-whatsapp"></i> Contactar';
 
             // ==============================
             // CONSTRUCCIÓN
