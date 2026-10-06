@@ -215,7 +215,9 @@ async function cargarPublicacionesPendientes() {
                 "Administrador autorizado:",
                 user.email
             );
-
+            
+            // Cargar publicaciones pendientes
+            await cargarPublicacionesPendientes();
         }
     );
 
