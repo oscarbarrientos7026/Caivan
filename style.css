@@ -315,6 +315,8 @@
             font-size: 13px;
             line-height: 1.45;
             margin-bottom: 13px;
+            height: 60px;
+            overflow: hidden;
         }
 
         .card-footer {
@@ -568,7 +570,7 @@
 
     object-fit: cover;
 }
-.modal-detalle .card-description {
+.modal-detalle {
     min-height: 180px;
     max-height: 300px;
     overflow-y: auto;
