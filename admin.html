@@ -73,7 +73,10 @@
         collection,
         query,
         where,
-        getDocs
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        doc,
     }
     from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
     // ==============================
@@ -369,7 +372,55 @@ async function cargarPublicacionesPendientes() {
             contenido.appendChild(
                 footer
             );
+            
+            const acciones =
+            document.createElement(
+                "div"
+            );
 
+            acciones.classList.add(
+                "admin-acciones"
+            );
+
+
+            const botonAutorizar =
+                document.createElement(
+                    "button"
+                );
+
+            botonAutorizar.textContent =
+                "Autorizar";
+
+            botonAutorizar.classList.add(
+                "admin-autorizar"
+            );
+
+
+            const botonRechazar =
+                document.createElement(
+                    "button"
+                );
+
+            botonRechazar.textContent =
+                "Rechazar";
+
+            botonRechazar.classList.add(
+                "admin-rechazar"
+            );
+
+
+            acciones.appendChild(
+                botonAutorizar
+            );
+
+            acciones.appendChild(
+                botonRechazar
+            );
+
+
+            contenido.appendChild(
+                acciones
+            );
 
             tarjeta.appendChild(
                 imagen
