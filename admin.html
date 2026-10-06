@@ -110,7 +110,71 @@
     const ADMIN_UID =
         "Wudpnc9RrWNKSXlmMxdoW6wj7gW2";
 
+async function cargarPublicacionesPendientes() {
 
+    const contenedor =
+        document.getElementById(
+            "publicaciones-pendientes"
+        );
+
+
+    // Buscar publicaciones
+    // que todavía no han sido autorizadas
+    const consulta =
+        query(
+            collection(
+                db,
+                "publicaciones"
+            ),
+            where(
+                "autorizada",
+                "==",
+                false
+            )
+        );
+
+
+    // Ejecutar consulta
+    const resultados =
+        await getDocs(
+            consulta
+        );
+
+
+    // Limpiar mensaje inicial
+    contenedor.innerHTML =
+        "";
+
+
+    // No hay publicaciones pendientes
+    if (
+        resultados.empty
+    ) {
+
+        contenedor.innerHTML =
+            "<p>No hay publicaciones pendientes.</p>";
+
+        return;
+    }
+
+
+    // Recorrer publicaciones
+    resultados.forEach(
+        (documento) => {
+
+            const publicacion =
+                documento.data();
+
+
+            console.log(
+                "Publicación pendiente:",
+                publicacion
+            );
+
+        }
+    );
+
+}
     // ==============================
     // COMPROBAR USUARIO
     // ==============================
