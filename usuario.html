@@ -1041,6 +1041,24 @@ function editarPublicacion(idPublicacion, publicacion) {
     document.getElementById("precio").value =
         publicacion.precio;
 
+    const campoPrecio = document.getElementById("precio");
+
+    campoPrecio.addEventListener("input", function () {
+
+        let valor = this.value;
+
+        // Dejar solamente números
+        valor = valor.replace(/\D/g, "");
+
+        // Agregar puntos cada tres cifras
+        valor = valor.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            "."
+        );
+
+        this.value = valor;
+    });
+
     document.getElementById("descripcion").value =
         publicacion.descripcion;
 
