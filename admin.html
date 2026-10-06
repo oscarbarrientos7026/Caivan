@@ -52,10 +52,102 @@
 
     <script type="module">
 
-        // Aquí colocaremos Firebase
-        // y la comprobación del administrador.
+    // ==============================
+    // FIREBASE
+    // ==============================
 
-    </script>
+    import {
+        initializeApp
+    }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+    import {
+        getAuth,
+        onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+    // ==============================
+    // CONFIGURACIÓN FIREBASE
+    // ==============================
+
+    const firebaseConfig = {
+
+        apiKey: "AIzaSyA9nKwRTGJliMO0Fk3rXiPk6rEAbQATiwA",
+        authDomain: "mercado-caivan.firebaseapp.com",
+        projectId: "mercado-caivan",
+        storageBucket: "mercado-caivan.firebasestorage.app",
+        messagingSenderId: "193052002924",
+        appId: "1:193052002924:web:228d68afbd8601dd7e2649",
+        measurementId: "G-WVWSJ9MD6Q"
+
+        };
+
+
+    // ==============================
+    // INICIALIZAR FIREBASE
+    // ==============================
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+
+    // ==============================
+    // UID DEL ADMINISTRADOR
+    // ==============================
+
+    const ADMIN_UID =
+        "Wudpnc9RrWNKSXlmMxdoW6wj7gW2";
+
+
+    // ==============================
+    // COMPROBAR USUARIO
+    // ==============================
+
+    onAuthStateChanged(
+        auth,
+        (user) => {
+
+            // No hay usuario conectado
+            if (!user) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
+
+
+            // Usuario conectado,
+            // pero no es administrador
+            if (
+                user.uid !== ADMIN_UID
+            ) {
+
+                alert(
+                    "No tienes permisos para acceder al panel de administración."
+                );
+
+                window.location.href =
+                    "index.html";
+
+                return;
+            }
+
+
+            // Usuario autorizado
+            console.log(
+                "Administrador autorizado:",
+                user.email
+            );
+
+        }
+    );
+
+</script>
 
 </body>
 
