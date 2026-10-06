@@ -600,5 +600,86 @@
     );
 
     </script>
+    <script type="module">
+
+    import {
+        initializeApp
+    }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+    import {
+        getFirestore,
+        collection,
+        query,
+        where,
+        getDocs
+    }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+
+        // EXACTAMENTE la misma configuración
+        // que ya utilizas en usuario.html
+        // y admin.html
+
+    };
+
+
+    const app =
+        initializeApp(
+            firebaseConfig
+        );
+
+
+    const db =
+        getFirestore(app);
+
+
+    async function cargarPublicacionesAutorizadas() {
+
+        const consulta =
+            query(
+                collection(
+                    db,
+                    "publicaciones"
+                ),
+
+                where(
+                    "autorizada",
+                    "==",
+                    true
+                )
+            );
+
+
+        const resultados =
+            await getDocs(
+                consulta
+            );
+
+
+        resultados.forEach(
+            (documento) => {
+
+                const publicacion =
+                    documento.data();
+
+
+                console.log(
+                    "Publicación autorizada:",
+                    publicacion
+                );
+
+            }
+        );
+
+    }
+
+
+    cargarPublicacionesAutorizadas();
+
+</script>
 </body>
 </html>
