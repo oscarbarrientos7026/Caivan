@@ -568,3 +568,58 @@
 
     object-fit: cover;
 }
+
+// ADMIN
+
+.admin-acciones {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+
+.admin-acciones button {
+
+    flex: 1;
+
+    padding: 10px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+
+.admin-autorizar {
+
+    background: #1d5f55;
+
+    color: white;
+}
+
+
+.admin-rechazar {
+
+    background: #eee;
+
+    color: #555;
+}
+
+
+.admin-autorizar:hover {
+
+    opacity: 0.9;
+}
+
+
+.admin-rechazar:hover {
+
+    background: #ddd;
+}
