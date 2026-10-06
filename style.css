@@ -496,13 +496,9 @@
     max-height: 90vh;
 
     background: white;
-
     border-radius: 15px;
 
     overflow: hidden;
-
-    display: flex;
-    flex-direction: column;
 
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.3);
@@ -570,27 +566,33 @@
     height: 100%;
     object-fit: cover;
 }
-.modal-detalle .card {
-    display: flex;
-    flex-direction: column;
-}
+
 .modal-detalle .card-content {
     display: flex;
     flex-direction: column;
+    max-height: 400px;
 }
 .modal-detalle .card-description {
     min-height: 180px;
-    max-height: 300px;
+    max-height: 250px;
+
     overflow-y: auto;
+    overflow-x: hidden;
+
     padding-right: 10px;
 }
 
 .modal-detalle .card-footer {
     flex-shrink: 0;
+
     background: white;
+
     border-top: 1px solid #eee;
+
     position: relative;
     z-index: 5;
+
+    padding-top: 15px;
 }
 
 /* ADMIN */
