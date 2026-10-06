@@ -499,7 +499,10 @@
 
     border-radius: 15px;
 
-    overflow-y: hidden;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
 
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.3);
@@ -549,6 +552,7 @@
 
 .detalle-contenido {
     width: 100%;
+    overflow: hidden;
 }
 
 
@@ -558,17 +562,21 @@
 
 .detalle-contenido .card-image {
     height: 400px;
-
-    border-radius:
-        15px 15px 0 0;
+    border-radius: 15px 15px 0 0;
 }
-
 
 .detalle-contenido .card-image img {
     width: 100%;
     height: 100%;
-    overflow: scroll;
     object-fit: cover;
+}
+.modal-detalle .card {
+    display: flex;
+    flex-direction: column;
+}
+.modal-detalle .card-content {
+    display: flex;
+    flex-direction: column;
 }
 .modal-detalle .card-description {
     min-height: 180px;
@@ -576,12 +584,12 @@
     overflow-y: auto;
     padding-right: 10px;
 }
+
 .modal-detalle .card-footer {
-    position: sticky;
-    bottom: 0;
+    flex-shrink: 0;
     background: white;
-    padding: 15px;
     border-top: 1px solid #eee;
+    position: relative;
     z-index: 5;
 }
 
