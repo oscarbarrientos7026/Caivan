@@ -547,7 +547,20 @@
             const tarjeta = document.createElement("article");
             tarjeta.classList.add("card");
             tarjeta.dataset.category = publicacion.categoria;
+            tarjeta.addEventListener("click", (evento) => {
 
+                if (evento.target.closest("button")) {
+                    return;
+                }
+
+                const tarjetaClon = tarjeta.cloneNode(true);
+
+                detalleContenido.innerHTML = "";
+
+                detalleContenido.appendChild(tarjetaClon);
+
+                modalDetalle.style.display = "flex";
+            });
 
             // ==============================
             // IMAGEN
@@ -687,56 +700,48 @@
     const cerrarDetalle = 
     document.getElementById( "cerrar-detalle" );
 
-    const cards =
-        document.querySelectorAll(".card");
-
-
     // ==============================
     // ABRIR DETALLE
     // ==============================
 
-    cards.forEach((card) => {
+    document.addEventListener(
+        "click",
+        (evento) => {
 
-        card.addEventListener(
-            "click",
-            (evento) => {
-
-                // Si el clic fue sobre un botón,
-                // no abrimos el detalle.
-                if (
-                    evento.target.closest(
-                        "button"
-                    )
-                ) {
-                    return;
-                }
+            const card =
+                evento.target.closest(".card");
 
 
-                // Crear una copia de la tarjeta
-                const tarjetaClon =
-                    card.cloneNode(true);
-
-
-                // Vaciar contenido anterior
-                detalleContenido.innerHTML =
-                    "";
-
-
-                // Insertar la copia
-                detalleContenido.appendChild(
-                    tarjetaClon
-                );
-
-
-                // Mostrar modal
-                modalDetalle.style.display =
-                    "flex";
-
+            if (!card) {
+                return;
             }
-        );
 
-    });
 
+            if (
+                evento.target.closest("button")
+            ) {
+                return;
+            }
+
+
+            const tarjetaClon =
+                card.cloneNode(true);
+
+
+            detalleContenido.innerHTML =
+                "";
+
+
+            detalleContenido.appendChild(
+                tarjetaClon
+            );
+
+
+            modalDetalle.style.display =
+                "flex";
+
+        }
+    );
 
     // ==============================
     // CERRAR CON X
