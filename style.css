@@ -574,7 +574,7 @@
 }
 .modal-detalle .card-description {
     min-height: 180px;
-    max-height: 250px;
+    max-height: 300px;
 
     overflow-y: auto;
     overflow-x: hidden;
@@ -583,16 +583,12 @@
 }
 
 .modal-detalle .card-footer {
-    flex-shrink: 0;
-
     background: white;
 
     border-top: 1px solid #eee;
 
     position: relative;
     z-index: 5;
-
-    padding-top: 15px;
 }
 
 /* ADMIN */
