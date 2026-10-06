@@ -180,8 +180,8 @@ async function cargarPublicacionesPendientes() {
     // ==============================
 
     onAuthStateChanged(
-        auth,
-        (user) => {
+        auth,  
+        async (user) => {
 
             // No hay usuario conectado
             if (!user) {
