@@ -567,7 +567,7 @@
 .detalle-contenido .card-image img {
     width: 100%;
     height: 100%;
-
+    overflow: scroll;
     object-fit: cover;
 }
 .modal-detalle .card-description {
@@ -575,6 +575,14 @@
     max-height: 300px;
     overflow-y: auto;
     padding-right: 10px;
+}
+.modal-detalle .card-footer {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    z-index: 5;
 }
 
 // ADMIN
