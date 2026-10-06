@@ -1443,6 +1443,11 @@ formulario.addEventListener(
             // =================================
             // CASO 2: NUEVA PUBLICACIÓN
             // =================================
+            const referenciaUsuario = doc(db,"usuarios", usuarioActual.uid );
+
+            const resultadoUsuario = await getDoc( referenciaUsuario);
+
+            const perfil = resultadoUsuario.data();
 
             const docRef =
                 await addDoc(
@@ -1459,6 +1464,7 @@ formulario.addEventListener(
                         fecha: serverTimestamp(),
                         imagen: imagenBase64,
                         autorizada: false,
+                        whatsapp: perfil.whatsapp,
                     }
                 );
 
