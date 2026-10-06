@@ -246,6 +246,7 @@
 
         .card-image {
             height: 170px;
+            max-width: 300px;
             background: #e9eceb;
             position: relative;
             display: flex;
