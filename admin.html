@@ -112,20 +112,23 @@
 
 async function cargarPublicacionesPendientes() {
 
+    // Buscamos el contenedor donde aparecerán
+    // las publicaciones pendientes.
     const contenedor =
         document.getElementById(
             "publicaciones-pendientes"
         );
 
 
-    // Buscar publicaciones
-    // que todavía no han sido autorizadas
+    // Buscamos en Firestore todas las publicaciones
+    // que todavía no han sido autorizadas.
     const consulta =
         query(
             collection(
                 db,
                 "publicaciones"
             ),
+
             where(
                 "autorizada",
                 "==",
@@ -134,19 +137,21 @@ async function cargarPublicacionesPendientes() {
         );
 
 
-    // Ejecutar consulta
+    // Ejecutamos la consulta.
     const resultados =
         await getDocs(
             consulta
         );
 
 
-    // Limpiar mensaje inicial
+    // Limpiamos el mensaje
+    // "Cargando publicaciones..."
     contenedor.innerHTML =
         "";
 
 
-    // No hay publicaciones pendientes
+    // Si no encontramos publicaciones,
+    // mostramos un mensaje.
     if (
         resultados.empty
     ) {
@@ -158,17 +163,228 @@ async function cargarPublicacionesPendientes() {
     }
 
 
-    // Recorrer publicaciones
+    // Recorremos cada documento encontrado.
     resultados.forEach(
         (documento) => {
 
+            // Obtenemos los datos de la publicación.
             const publicacion =
                 documento.data();
 
 
-            console.log(
-                "Publicación pendiente:",
-                publicacion
+            // Creamos la tarjeta.
+            const tarjeta =
+                document.createElement(
+                    "article"
+                );
+
+
+            tarjeta.classList.add(
+                "card"
+            );
+
+
+            // ==============================
+            // IMAGEN
+            // ==============================
+
+            const imagen =
+                document.createElement(
+                    "div"
+                );
+
+
+            imagen.classList.add(
+                "card-image"
+            );
+
+
+            if (
+                publicacion.imagen
+            ) {
+
+                const foto =
+                    document.createElement(
+                        "img"
+                    );
+
+
+                foto.src =
+                    publicacion.imagen;
+
+
+                foto.alt =
+                    publicacion.titulo;
+
+
+                imagen.appendChild(
+                    foto
+                );
+
+            } else {
+
+                imagen.textContent =
+                    "Sin imagen";
+
+            }
+
+
+            // ==============================
+            // CONTENIDO
+            // ==============================
+
+            const contenido =
+                document.createElement(
+                    "div"
+                );
+
+
+            contenido.classList.add(
+                "card-content"
+            );
+
+
+            // Categoría
+            const categoria =
+                document.createElement(
+                    "div"
+                );
+
+
+            categoria.classList.add(
+                "card-category"
+            );
+
+
+            categoria.textContent =
+                publicacion.categoria;
+
+
+            // Título
+            const titulo =
+                document.createElement(
+                    "div"
+                );
+
+
+            titulo.classList.add(
+                "card-title"
+            );
+
+
+            titulo.textContent =
+                publicacion.titulo;
+
+
+            // Descripción
+            const descripcion =
+                document.createElement(
+                    "div"
+                );
+
+
+            descripcion.classList.add(
+                "card-description"
+            );
+
+
+            descripcion.textContent =
+                publicacion.descripcion;
+
+
+            // Pie de tarjeta
+            const footer =
+                document.createElement(
+                    "div"
+                );
+
+
+            footer.classList.add(
+                "card-footer"
+            );
+
+
+            // Precio
+            const precio =
+                document.createElement(
+                    "div"
+                );
+
+
+            precio.classList.add(
+                "price"
+            );
+
+
+            precio.textContent =
+                publicacion.precio;
+
+
+            // Propietario
+            const propietario =
+                document.createElement(
+                    "div"
+                );
+
+
+            propietario.classList.add(
+                "seller"
+            );
+
+
+            propietario.textContent =
+                "Usuario: "
+                + publicacion.propietario;
+
+
+            // ==============================
+            // CONSTRUIMOS LA TARJETA
+            // ==============================
+
+            footer.appendChild(
+                precio
+            );
+
+
+            footer.appendChild(
+                propietario
+            );
+
+
+            contenido.appendChild(
+                categoria
+            );
+
+
+            contenido.appendChild(
+                titulo
+            );
+
+
+            contenido.appendChild(
+                descripcion
+            );
+
+
+            contenido.appendChild(
+                footer
+            );
+
+
+            tarjeta.appendChild(
+                imagen
+            );
+
+
+            tarjeta.appendChild(
+                contenido
+            );
+
+
+            // Finalmente añadimos
+            // la tarjeta al panel.
+            contenedor.appendChild(
+                tarjeta
             );
 
         }
