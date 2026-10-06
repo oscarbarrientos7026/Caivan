@@ -1,113 +1,91 @@
+// Esperamos hasta que el navegador haya terminado
+// de construir el HTML.
+document.addEventListener('DOMContentLoaded', function() {
 
 
-    // Esperamos hasta que el navegador haya terminado
-    // de construir el HTML.
-    document.addEventListener('DOMContentLoaded', function() {
+    // ==========================================================
+    // OBTENER ELEMENTOS DEL HTML
+    // ==========================================================
+
+    // Ahora que el HTML ya fue construido,
+    // podemos buscar las categorías.
+    const categories = document.querySelectorAll('.category');
 
 
-        // ==========================================================
-        // OBTENER ELEMENTOS DEL HTML
-        // ==========================================================
+    // ==========================================================
+    // EVENTOS DE LAS CATEGORÍAS
+    // ==========================================================
 
-        // Ahora que el HTML ya fue construido,
-        // podemos buscar las categorías.
-        const categories = document.querySelectorAll('.category');
-
-        // Y también podemos buscar las cards.
-        const cards = document.querySelectorAll('.card');
+    categories.forEach(category => {
 
 
-        // ==========================================================
-        // EVENTOS DE LAS CATEGORÍAS
-        // ==========================================================
-
-        // Recorremos todas las categorías.
-        //
-        // Por ejemplo:
-        //
-        // Todo
-        // Hogar
-        // Ropa
-        // Tecnología
-        // Deportes
-        // ...
-        //
-        categories.forEach(category => {
+        // A cada categoría le asignamos un "escuchador"
+        // que detectará cuando el usuario haga click.
+        category.addEventListener('click', function(event) {
 
 
-            // A cada categoría le asignamos un "escuchador"
-            // que detectará cuando el usuario haga click.
-            category.addEventListener('click', function(event) {
+            // Como nuestras categorías son <a href="#">
+            // evitamos que el navegador siga el enlace.
+            event.preventDefault();
 
 
-                // Como nuestras categorías son <a href="#">
-                // evitamos que el navegador siga el enlace.
-                event.preventDefault();
+            // ==================================================
+            // OBTENER CATEGORÍA SELECCIONADA
+            // ==================================================
+
+            const selectedCategory =
+                this.dataset.category;
 
 
-                // ==================================================
-                // OBTENER CATEGORÍA SELECCIONADA
-                // ==================================================
+            // ==================================================
+            // ACTUALIZAR CATEGORÍA ACTIVA
+            // ==================================================
 
-                // "this" representa la categoría sobre la que
-                // el usuario acaba de hacer click.
-                //
-                // Por ejemplo, si hizo click en:
-                //
-                // <a data-category="tecnologia">
-                //
-                // esto nos devuelve:
-                //
-                // "tecnologia"
-                //
-                const selectedCategory = this.dataset.category;
+            // Primero quitamos "active" de todas las categorías.
+            categories.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            this.classList.add('active');
 
 
-                // ==================================================
-                // ACTUALIZAR CATEGORÍA ACTIVA
-                // ==================================================
+            // ==================================================
+            // OBTENER LAS CARDS
+            // ==================================================
 
-                // Primero quitamos "active" de todas las categorías.
-                categories.forEach(item => {
-                    item.classList.remove('active');
-                });
+            // Buscamos las cards justo cuando se hace click.
+            // Así también encontramos las que creó Firebase.
+            const cards =
+                document.querySelectorAll('.card');
 
 
-                                this.classList.add('active');
+            // ==================================================
+            // FILTRAR LAS CARDS
+            // ==================================================
+
+            cards.forEach(card => {
+
+                const cardCategory =
+                    card.dataset.category;
 
 
                 // ==================================================
-                // FILTRAR LAS CARDS
+                // COMPARAR
                 // ==================================================
 
-                // Recorremos todas las tarjetas de productos.
-                cards.forEach(card => {
+                if (
+                    selectedCategory === 'todo' ||
+                    cardCategory === selectedCategory
+                ) {
 
+                    card.style.display = '';
 
+                } else {
 
-                    const cardCategory = card.dataset.category;
+                    // Ocultar la tarjeta.
+                    card.style.display = 'none';
 
-
-                    // ==================================================
-                    // COMPARAR
-                    // ==================================================
-
-                    
-                    if (
-                        selectedCategory === 'todo' ||
-                        cardCategory === selectedCategory
-                    ) {
-
-                        card.style.display = '';
-
-                    } else {
-
-                        // Ocultar la tarjeta.
-                        card.style.display = 'none';
-
-                    }
-
-                });
+                }
 
             });
 
@@ -115,4 +93,4 @@
 
     });
 
-
+});
