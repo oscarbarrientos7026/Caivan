@@ -437,7 +437,58 @@ async function cargarPublicacionesPendientes() {
             contenedor.appendChild(
                 tarjeta
             );
+            botonAutorizar.addEventListener(
+                "click",
+                async () => {
 
+                    await updateDoc(
+                        doc(
+                            db,
+                            "publicaciones",
+                            documento.id
+                        ),
+
+                        {
+                            autorizada: true
+                        }
+                    );
+
+
+                    tarjeta.remove();
+
+                }
+            );
+            
+            botonRechazar.addEventListener(
+                "click",
+                async () => {
+
+                    const confirmar =
+                        confirm(
+                            "¿Seguro que quieres rechazar esta publicación?"
+                        );
+
+
+                    if (!confirmar) {
+
+                        return;
+
+                    }
+
+
+                    await deleteDoc(
+                        doc(
+                            db,
+                            "publicaciones",
+                            documento.id
+                        )
+                    );
+
+
+                    tarjeta.remove();
+
+                }
+            );
         }
     );
 
