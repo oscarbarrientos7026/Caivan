@@ -581,6 +581,7 @@
     overflow-x: hidden;
 
     padding-right: 10px;
+    white-space: pre-line;
 }
 
 .modal-detalle .card-footer {
