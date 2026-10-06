@@ -569,7 +569,7 @@
 
     object-fit: cover;
 }
-.modal-detalle {
+.modal-detalle .card-description {
     min-height: 180px;
     max-height: 300px;
     overflow-y: auto;
