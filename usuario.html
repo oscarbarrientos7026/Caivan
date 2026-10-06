@@ -1384,6 +1384,11 @@ formulario.addEventListener(
             Number(
                 document.getElementById("precio").value
             );
+        const precioTexto =
+            document.getElementById("precio").value;
+
+        const precio =
+            Number(precioTexto.replace(/\./g, ""));
 
         const descripcion =
             document.getElementById("descripcion").value;
