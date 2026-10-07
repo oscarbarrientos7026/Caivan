@@ -208,15 +208,37 @@
             placeholder="Ej: Monitor Samsung 24 pulgadas"
             required
         >
-        <label for="imagen">
-        Imagen
+
+        <label>
+            Imágenes de la publicación
         </label>
 
-        <input
-            type="file"
-            id="imagen"
-            accept="image/*"
+        <div id="contenedor-items">
+
+            <div class="item-publicacion">
+
+                <input
+                    type="file"
+                    class="imagen-item"
+                    accept="image/*"
+                >
+
+                <input
+                    type="text"
+                    class="descripcion-item"
+                    placeholder="Breve descripción"
+                >
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            id="agregar-item"
         >
+            + Agregar más items
+        </button>
 
 
         <label>
@@ -985,6 +1007,44 @@ async function cargarPublicaciones() {
 
     });
 }
+         // boton agregar items
+const contenedorItems =
+    document.getElementById("contenedor-items");
+
+const botonAgregarItem =
+    document.getElementById("agregar-item");
+
+botonAgregarItem.addEventListener(
+    "click",
+    function() {
+
+        const nuevoItem =
+            document.createElement("div");
+
+        nuevoItem.classList.add(
+            "item-publicacion"
+        );
+
+        nuevoItem.innerHTML = `
+            <input
+                type="file"
+                class="imagen-item"
+                accept="image/*"
+            >
+
+            <input
+                type="text"
+                class="descripcion-item"
+                placeholder="Breve descripción"
+            >
+        `;
+
+        contenedorItems.appendChild(
+            nuevoItem
+        );
+
+    }
+);
 
 async function eliminarPublicacion(idPublicacion) {
 
@@ -1336,32 +1396,92 @@ function reducirImagen(archivo) {
 formulario.addEventListener(
     "submit",
     async (event) => {
-        console.log("SE EJECUTÓ EL SUBMIT");
+
+        console.log(
+            "SE EJECUTÓ EL SUBMIT"
+        );
+
         event.preventDefault();
 
 
         // ==============================
         // OBTENER DATOS DEL FORMULARIO
         // ==============================
-        const archivo =
-            document.getElementById("imagen").files[0];
 
-        let imagenBase64 = null;
+        const titulo =
+            document.getElementById(
+                "titulo"
+            ).value;
+
+        const categoria =
+            document.getElementById(
+                "categoria"
+            ).value;
+
+        const precioTexto =
+            document.getElementById(
+                "precio"
+            ).value;
+
+        const precio =
+            Number(
+                precioTexto.replace(/\./g, "")
+            );
+
+        const descripcion =
+            document.getElementById(
+                "descripcion"
+            ).value;
 
 
-        if (archivo) {
+        // ==============================
+        // OBTENER IMÁGENES Y DESCRIPCIONES
+        // ==============================
+
+        const items =
+            document.querySelectorAll(
+                ".item-publicacion"
+            );
+
+        const productos = [];
+
+
+        for (const item of items) {
+
+            const archivo =
+                item.querySelector(
+                    ".imagen-item"
+                ).files[0];
+
+            const descripcionItem =
+                item.querySelector(
+                    ".descripcion-item"
+                ).value;
+
+
+            // Si este bloque no tiene imagen,
+            // simplemente lo ignoramos.
+
+            if (!archivo) {
+                continue;
+            }
+
+
+            // Comprimir imagen
 
             const imagenReducida =
-                await reducirImagen(archivo);
+                await reducirImagen(
+                    archivo
+                );
 
-            imagenBase64 =
+
+            // Convertir a Base64
+
+            const imagenBase64 =
                 await blobADataURL(
                     imagenReducida
                 );
 
-        }
-
-        if (imagenBase64) {
 
             console.log(
                 "Tamaño de imagen:",
@@ -1371,29 +1491,26 @@ formulario.addEventListener(
                 "KB"
             );
 
+
+            // Guardar imagen + descripción
+
+            productos.push({
+
+                imagen:
+                    imagenBase64,
+
+                descripcion:
+                    descripcionItem
+
+            });
+
         }
 
-        const titulo =
-            document.getElementById("titulo").value;
 
-        const categoria =
-            document.getElementById("categoria").value;
+        // ==============================
+        // COMPROBAR USUARIO
+        // ==============================
 
-        const precio =
-            Number(
-                document.getElementById("precio").value
-            );
-        const precioTexto =
-            document.getElementById("precio").value;
-
-        const precio =
-            Number(precioTexto.replace(/\./g, ""));
-
-        const descripcion =
-            document.getElementById("descripcion").value;
-
-
-        // Comprobar que haya usuario
         if (!usuarioActual) {
 
             mensaje.textContent =
@@ -1425,7 +1542,8 @@ formulario.addEventListener(
                         titulo: titulo,
                         categoria: categoria,
                         precio: precio,
-                        descripcion: descripcion
+                        descripcion: descripcion,
+                        productos: productos
                     }
                 );
 
@@ -1434,15 +1552,12 @@ formulario.addEventListener(
                     "¡Publicación actualizada correctamente!";
 
 
-                // Ya no estamos editando
                 publicacionEditando = null;
 
 
-                // Restaurar formulario
                 formulario.reset();
 
 
-                // Restaurar botón
                 const boton =
                     formulario.querySelector(
                         'button[type="submit"]'
@@ -1452,9 +1567,7 @@ formulario.addEventListener(
                     "Publicar";
 
 
-                // Recargar tarjetas
                 await cargarPublicaciones();
-
 
                 return;
             }
@@ -1463,11 +1576,24 @@ formulario.addEventListener(
             // =================================
             // CASO 2: NUEVA PUBLICACIÓN
             // =================================
-            const referenciaUsuario = doc(db,"usuarios", usuarioActual.uid );
 
-            const resultadoUsuario = await getDoc( referenciaUsuario);
+            const referenciaUsuario =
+                doc(
+                    db,
+                    "usuarios",
+                    usuarioActual.uid
+                );
 
-            const perfil = resultadoUsuario.data();
+
+            const resultadoUsuario =
+                await getDoc(
+                    referenciaUsuario
+                );
+
+
+            const perfil =
+                resultadoUsuario.data();
+
 
             const docRef =
                 await addDoc(
@@ -1476,16 +1602,37 @@ formulario.addEventListener(
                         "publicaciones"
                     ),
                     {
-                        titulo: titulo,
-                        categoria: categoria,
-                        precio: precio,
-                        descripcion: descripcion,
-                        propietario: usuarioActual.uid,
-                        nombreVendedor: perfil.nombre + " " + perfil.apellido,
-                        fecha: serverTimestamp(),
-                        imagen: imagenBase64,
-                        autorizada: false,
-                        whatsapp: perfil.whatsapp,
+                        titulo:
+                            titulo,
+
+                        categoria:
+                            categoria,
+
+                        precio:
+                            precio,
+
+                        descripcion:
+                            descripcion,
+
+                        propietario:
+                            usuarioActual.uid,
+
+                        nombreVendedor:
+                            perfil.nombre +
+                            " " +
+                            perfil.apellido,
+
+                        whatsapp:
+                            perfil.whatsapp,
+
+                        productos:
+                            productos,
+
+                        fecha:
+                            serverTimestamp(),
+
+                        autorizada:
+                            false
                     }
                 );
 
@@ -1503,7 +1650,6 @@ formulario.addEventListener(
             formulario.reset();
 
 
-            // Recargar las publicaciones
             await cargarPublicaciones();
 
         }
@@ -1521,7 +1667,6 @@ formulario.addEventListener(
 
     }
 );
-
 
         // ==========================================
         // 10. CERRAR SESIÓN
