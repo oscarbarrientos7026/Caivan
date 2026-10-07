@@ -285,6 +285,27 @@
     </main>
 
 </div>
+<div id="modal-detalle" class="modal-detalle">
+
+
+    <div class="detalle-card">
+
+        <button
+            id="cerrar-detalle"
+            class="cerrar-detalle"
+        >
+            ×
+        </button>
+
+        <div
+            id="detalle-contenido"
+            class="detalle-contenido"
+        >
+        </div>
+
+    </div>
+
+</div>
 
     <script type="module">
 
@@ -637,13 +658,38 @@
             if (
                 publicacion.productos &&
                 publicacion.productos.length > 0
-             ) {
+            ) {
 
                 imagenPrincipal =
                     publicacion.productos[0].imagen;
 
-                }
+            }
 
+            // Publicación antigua
+            else if (publicacion.imagen) {
+
+                imagenPrincipal =
+                    publicacion.imagen;
+
+            }
+
+
+            if (imagenPrincipal) {
+
+                const foto =
+                    document.createElement("img");
+
+                foto.src =
+                    imagenPrincipal;
+
+                foto.alt =
+                    publicacion.titulo;
+
+                cardImage.appendChild(
+                    foto
+                );
+
+            }
 
 
             // ==============================
@@ -725,12 +771,40 @@
 
 
             // ==============================
+            // ABRIR DETALLE
+            // ==============================
+
+            tarjeta.addEventListener(
+                "click",
+                (evento) => {
+
+                    if (
+                        evento.target.closest("a")
+                    ) {
+                        return;
+                    }
+
+                    abrirDetalle(
+                        publicacion,
+                        tarjeta
+                    );
+
+                }
+            );
+
+
+            // ==============================
             // INSERTAR EN LA PÁGINA
             // ==============================
 
-            const contenedor = document.getElementById("contenedor-publicaciones");
+            const contenedor =
+                document.getElementById(
+                    "contenedor-publicaciones"
+                );
 
-            contenedor.appendChild(tarjeta);
+            contenedor.appendChild(
+                tarjeta
+            );
 
         });
 
@@ -741,110 +815,35 @@
 
 </script>
 
-<div id="modal-detalle" class="modal-detalle">
 
-
-    <div class="detalle-card">
-
-        <button
-            id="cerrar-detalle"
-            class="cerrar-detalle"
-        >
-            ×
-        </button>
-
-        <div
-            id="detalle-contenido"
-            class="detalle-contenido"
-        >
-        </div>
-
-    </div>
-
-</div>
     <!-- ==============================
      MODAL DETALLE PUBLICACIÓN
-============================== -->
+    ============================== -->
 
     <script>
-    // ============================== // ELEMENTOS DEL MODAL // ============================== 
-    const modalDetalle = 
-    document.getElementById( "modal-detalle" );
-
-    const detalleContenido = 
-    document.getElementById( "detalle-contenido" );
-
-    const cerrarDetalle = 
-    document.getElementById( "cerrar-detalle" );
-
-
-
-    // ==============================
-    // ABRIR DETALLE
-    // ==============================
-
-    tarjeta.addEventListener(
-        "click",
-        (evento) => {
-
-            if (
-                evento.target.closest("a")
-            ) {
-                return;
-            }
-
-            abrirDetalle(
-                publicacion,
-                tarjeta
+        const modalDetalle =
+            document.getElementById(
+                "modal-detalle"
             );
 
-        }
-    );
+        const detalleContenido =
+            document.getElementById(
+                "detalle-contenido"
+            );
+
+        const cerrarDetalle =
+            document.getElementById(
+                "cerrar-detalle"
+            );
 
 
-    // ==============================
-    // INSERTAR EN LA PÁGINA
-    // ==============================
+        // ==============================
+        // CERRAR CON X
+        // ==============================
 
-    const contenedor =
-        document.getElementById(
-            "contenedor-publicaciones"
-        );
-
-    contenedor.appendChild(
-        tarjeta
-    );
-    
-
-    // ==============================
-    // CERRAR CON X
-    // ==============================
-
-    cerrarDetalle.addEventListener(
-        "click",
-        () => {
-
-            modalDetalle.style.display =
-                "none";
-
-            detalleContenido.innerHTML =
-                "";
-
-        }
-    );
-
-
-    // ==============================
-    // CERRAR HACIENDO CLIC AFUERA
-    // ==============================
-
-    modalDetalle.addEventListener(
-        "click",
-        (evento) => {
-
-            if (
-                evento.target === modalDetalle
-            ) {
+        cerrarDetalle.addEventListener(
+            "click",
+            () => {
 
                 modalDetalle.style.display =
                     "none";
@@ -853,10 +852,31 @@
                     "";
 
             }
+        );
 
-        }
-    );
 
+        // ==============================
+        // CERRAR HACIENDO CLIC AFUERA
+        // ==============================
+
+        modalDetalle.addEventListener(
+            "click",
+            (evento) => {
+
+                if (
+                    evento.target === modalDetalle
+                ) {
+
+                    modalDetalle.style.display =
+                        "none";
+
+                    detalleContenido.innerHTML =
+                        "";
+
+                }
+
+            }
+        );
     </script>
 </body>
 </html>
