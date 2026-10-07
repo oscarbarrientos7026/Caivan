@@ -594,7 +594,32 @@
     position: relative;
     z-index: 5;
 }
+.controles-galeria {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    padding: 10px 0;
+    background: white;
+}
 
+.flecha-galeria {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contador-galeria {
+    font-size: 14px;
+    min-width: 45px;
+    text-align: center;
+}
 /* ADMIN */
 
 .admin-acciones {

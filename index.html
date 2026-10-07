@@ -347,269 +347,281 @@
         getFirestore(app);
 
     function abrirDetalle(
-    publicacion,
-    tarjeta
-)
+        publicacion,
+        tarjeta
+    )
 
-{
+        {
 
-    // ==============================
-    // PREPARAR PRODUCTOS
-    // ==============================
+            // ==============================
+            // PREPARAR PRODUCTOS
+            // ==============================
 
-    let productos = [];
-
-    if (
-        publicacion.productos &&
-        publicacion.productos.length > 0
-    ) {
-
-        productos =
-            publicacion.productos;
-
-    }
-
-    // Compatibilidad con publicaciones antiguas
-
-    else if (publicacion.imagen) {
-
-        productos = [
-            {
-                imagen:
-                    publicacion.imagen,
-
-                descripcion:
-                    ""
-            }
-        ];
-
-    }
-
-
-    let indiceActual = 0;
-
-
-    // ==============================
-    // CLONAR TARJETA
-    // ==============================
-
-    const tarjetaClon =
-        tarjeta.cloneNode(true);
-
-
-    detalleContenido.innerHTML =
-        "";
-
-
-    detalleContenido.appendChild(
-        tarjetaClon
-    );
-
-
-    // ==============================
-    // ELEMENTOS DEL MODAL
-    // ==============================
-
-    const imagenContenedor =
-        tarjetaClon.querySelector(
-            ".card-image"
-        );
-
-
-    const imagen =
-        imagenContenedor.querySelector(
-            "img"
-        );
-
-
-    const descripcionGeneral =
-        tarjetaClon.querySelector(
-            ".card-description"
-        );
-
-
-    // ==============================
-    // DESCRIPCIÓN DEL ITEM
-    // ==============================
-
-    const descripcionItem =
-        document.createElement("div");
-
-    descripcionItem.classList.add(
-        "descripcion-item-modal"
-    );
-
-
-    descripcionGeneral.parentNode.insertBefore(
-        descripcionItem,
-        descripcionGeneral
-    );
-
-
-    // ==============================
-    // CONTROLES
-    // ==============================
-
-    const botonAnterior =
-        document.createElement("button");
-
-    botonAnterior.classList.add(
-        "flecha-galeria",
-        "flecha-anterior"
-    );
-
-    botonAnterior.textContent =
-        "‹";
-
-
-    const botonSiguiente =
-        document.createElement("button");
-
-    botonSiguiente.classList.add(
-        "flecha-galeria",
-        "flecha-siguiente"
-    );
-
-    botonSiguiente.textContent =
-        "›";
-
-
-    const contador =
-        document.createElement("div");
-
-    contador.classList.add(
-        "contador-galeria"
-    );
-
-
-    imagenContenedor.appendChild(
-        botonAnterior
-    );
-
-    imagenContenedor.appendChild(
-        botonSiguiente
-    );
-
-    imagenContenedor.appendChild(
-        contador
-    );
-
-
-    // ==============================
-    // ACTUALIZAR GALERÍA
-    // ==============================
-
-    function actualizarGaleria() {
-
-        const producto =
-            productos[indiceActual];
-
-
-        imagen.src =
-            producto.imagen;
-
-
-        descripcionItem.textContent =
-            producto.descripcion || "";
-
-
-        contador.textContent =
-            (indiceActual + 1) +
-            " / " +
-            productos.length;
-
-
-        // Si solo existe una imagen,
-        // ocultamos las flechas.
-
-        if (productos.length <= 1) {
-
-            botonAnterior.style.display =
-                "none";
-
-            botonSiguiente.style.display =
-                "none";
-
-        }
-
-        else {
-
-            botonAnterior.style.display =
-                "flex";
-
-            botonSiguiente.style.display =
-                "flex";
-
-        }
-
-    }
-
-
-    // ==============================
-    // IMAGEN ANTERIOR
-    // ==============================
-
-    botonAnterior.addEventListener(
-        "click",
-        (evento) => {
-
-            evento.stopPropagation();
-
-            indiceActual--;
+            let productos = [];
 
             if (
-                indiceActual < 0
+                publicacion.productos &&
+                publicacion.productos.length > 0
             ) {
 
-                indiceActual =
-                    productos.length - 1;
+                productos =
+                    publicacion.productos;
 
             }
+
+            // Compatibilidad con publicaciones antiguas
+
+            else if (publicacion.imagen) {
+
+                productos = [
+                    {
+                        imagen:
+                            publicacion.imagen,
+
+                        descripcion:
+                            ""
+                    }
+                ];
+
+            }
+
+
+            let indiceActual = 0;
+
+
+            // ==============================
+            // CLONAR TARJETA
+            // ==============================
+
+            const tarjetaClon =
+                tarjeta.cloneNode(true);
+
+
+            detalleContenido.innerHTML =
+                "";
+
+
+            detalleContenido.appendChild(
+                tarjetaClon
+            );
+
+
+            // ==============================
+            // ELEMENTOS DEL MODAL
+            // ==============================
+
+            const imagenContenedor =
+                tarjetaClon.querySelector(
+                    ".card-image"
+                );
+
+
+            const imagen =
+                imagenContenedor.querySelector(
+                    "img"
+                );
+
+
+            const descripcionGeneral =
+                tarjetaClon.querySelector(
+                    ".card-description"
+                );
+
+
+            // ==============================
+            // DESCRIPCIÓN DEL ITEM
+            // ==============================
+
+            const descripcionItem =
+                document.createElement("div");
+
+            descripcionItem.classList.add(
+                "descripcion-item-modal"
+            );
+
+
+            descripcionGeneral.parentNode.insertBefore(
+                descripcionItem,
+                descripcionGeneral
+            );
+
+
+            // ==============================
+            // CONTROLES
+            // ==============================
+
+            const botonAnterior =
+                document.createElement("button");
+
+            botonAnterior.classList.add(
+                "flecha-galeria",
+                "flecha-anterior"
+            );
+
+            botonAnterior.textContent =
+                "‹";
+
+
+            const botonSiguiente =
+                document.createElement("button");
+
+            botonSiguiente.classList.add(
+                "flecha-galeria",
+                "flecha-siguiente"
+            );
+
+            botonSiguiente.textContent =
+                "›";
+
+
+            const contador =
+                document.createElement("div");
+
+            contador.classList.add(
+                "contador-galeria"
+            );
+
+
+            const controlesGaleria =
+                document.createElement("div");
+
+                controlesGaleria.classList.add(
+                    "controles-galeria"
+                );
+
+                controlesGaleria.appendChild(
+                    botonAnterior
+                );
+
+                controlesGaleria.appendChild(
+                    contador
+                );
+
+                controlesGaleria.appendChild(
+                    botonSiguiente
+                );
+
+                imagenContenedor.parentNode.insertBefore(
+                    controlesGaleria,
+                    imagenContenedor.nextSibling
+                );
+
+
+            // ==============================
+            // ACTUALIZAR GALERÍA
+            // ==============================
+
+            function actualizarGaleria() {
+
+                const producto =
+                    productos[indiceActual];
+
+
+                imagen.src =
+                    producto.imagen;
+
+
+                descripcionItem.textContent =
+                    producto.descripcion || "";
+
+
+                contador.textContent =
+                    (indiceActual + 1) +
+                    " / " +
+                    productos.length;
+
+
+                // Si solo existe una imagen,
+                // ocultamos las flechas.
+
+                if (productos.length <= 1) {
+
+                    botonAnterior.style.display =
+                        "none";
+
+                    botonSiguiente.style.display =
+                        "none";
+
+                }
+
+                else {
+
+                    botonAnterior.style.display =
+                        "flex";
+
+                    botonSiguiente.style.display =
+                        "flex";
+
+                }
+
+            }
+
+
+            // ==============================
+            // IMAGEN ANTERIOR
+            // ==============================
+
+            botonAnterior.addEventListener(
+                "click",
+                (evento) => {
+
+                    evento.stopPropagation();
+
+                    indiceActual--;
+
+                    if (
+                        indiceActual < 0
+                    ) {
+
+                        indiceActual =
+                            productos.length - 1;
+
+                    }
+
+                    actualizarGaleria();
+
+                }
+            );
+
+
+            // ==============================
+            // IMAGEN SIGUIENTE
+            // ==============================
+
+            botonSiguiente.addEventListener(
+                "click",
+                (evento) => {
+
+                    evento.stopPropagation();
+
+                    indiceActual++;
+
+                    if (
+                        indiceActual >=
+                        productos.length
+                    ) {
+
+                        indiceActual = 0;
+
+                    }
+
+                    actualizarGaleria();
+
+                }
+            );
+
+
+            // Mostrar primera imagen
 
             actualizarGaleria();
 
-        }
-    );
 
+            // Abrir modal
 
-    // ==============================
-    // IMAGEN SIGUIENTE
-    // ==============================
-
-    botonSiguiente.addEventListener(
-        "click",
-        (evento) => {
-
-            evento.stopPropagation();
-
-            indiceActual++;
-
-            if (
-                indiceActual >=
-                productos.length
-            ) {
-
-                indiceActual = 0;
-
-            }
-
-            actualizarGaleria();
+            modalDetalle.style.display =
+                "flex";
 
         }
-    );
-
-
-    // Mostrar primera imagen
-
-    actualizarGaleria();
-
-
-    // Abrir modal
-
-    modalDetalle.style.display =
-        "flex";
-
-}
     async function cargarPublicacionesAutorizadas() {
 
         const consulta =
