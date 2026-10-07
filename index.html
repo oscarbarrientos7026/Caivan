@@ -745,7 +745,27 @@
 
             const price = document.createElement("div");
             price.classList.add("price");
-            price.textContent = "$"+publicacion.precio.toLocaleString("es-CL");
+            if (publicacion.precioPorItem) {
+
+                price.textContent =
+                    "Ver precios";
+
+            } else {
+
+                price.textContent =
+                    "$" +
+                    publicacion.precio.toLocaleString(
+                        "es-CL"
+                    );
+
+                if (publicacion.precioNegociable) {
+
+                    price.textContent +=
+                        " · Negociable";
+
+                }
+
+            }
 
 
             // Propietario

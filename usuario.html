@@ -228,7 +228,11 @@
                     class="descripcion-item"
                     placeholder="Breve descripción"
                 >
-
+                <input
+                    type="text"
+                    class="precio-item"
+                    placeholder="Precio del ítem"
+                >
             </div>
 
         </div>
@@ -294,17 +298,29 @@
         </select>
 
 
-        <label>
-            Precio
-        </label>
+        <label for="precio">Precio</label>
 
         <input
-            type="number"
+            type="text"
             id="precio"
-            placeholder="20000, sin puntos"
-            min="0"
-            required
+            placeholder="Ej: 35.000"
         >
+
+        <label class="opcion-precio">
+            <input
+                type="checkbox"
+                id="precio-por-item"
+            >
+            El precio depende del ítem
+        </label>
+
+        <label class="opcion-precio">
+            <input
+                type="checkbox"
+                id="precio-negociable"
+            >
+            Precio negociable
+        </label>
 
 
         <label>
@@ -959,6 +975,41 @@ async function cargarPublicaciones() {
             ).format(
                 publicacion.precio
             );
+                
+        const campoPrecio =
+        document.getElementById("precio");
+
+        const precioPorItem =
+            document.getElementById("precio-por-item");
+
+        const precioNegociable =
+            document.getElementById("precio-negociable");
+
+
+        precioPorItem.addEventListener(
+            "change",
+            function() {
+
+                if (this.checked) {
+
+                    campoPrecio.value = "";
+
+                    campoPrecio.disabled = true;
+
+                    precioNegociable.checked = false;
+
+                    precioNegociable.disabled = true;
+
+                } else {
+
+                    campoPrecio.disabled = false;
+
+                    precioNegociable.disabled = false;
+
+                }
+
+            }
+        );
 
         precio.textContent =
             "$" + precioFormateado;
@@ -1035,10 +1086,44 @@ botonAgregarItem.addEventListener(
             <input
                 type="text"
                 class="descripcion-item"
-                placeholder="Breve descripción"
+                placeholder="nombre ítem"
+            >
+
+            <input
+                type="text"
+                class="precio-item"
+                placeholder="Precio del ítem"
             >
         `;
+        document.addEventListener(
+            "input",
+            function(event) {
 
+                if (
+                    event.target.classList.contains(
+                        "precio-item"
+                    )
+                ) {
+
+                    let valor =
+                        event.target.value;
+
+                    valor =
+                        valor.replace(/\D/g, "");
+
+                    valor =
+                        valor.replace(
+                            /\B(?=(\d{3})+(?!\d))/g,
+                            "."
+                        );
+
+                    event.target.value =
+                        valor;
+
+                }
+
+            }
+        );
         contenedorItems.appendChild(
             nuevoItem
         );
@@ -1423,10 +1508,26 @@ formulario.addEventListener(
                 "precio"
             ).value;
 
-        const precio =
-            Number(
-                precioTexto.replace(/\./g, "")
-            );
+        const precioPorItem =
+            document.getElementById(
+                "precio-por-item"
+            ).checked;
+
+        const precioNegociable =
+            document.getElementById(
+                "precio-negociable"
+            ).checked;
+
+        let precio = null;
+
+        if (!precioPorItem) {
+
+            precio =
+                Number(
+                    precioTexto.replace(/\./g, "")
+                );
+
+        }
 
         const descripcion =
             document.getElementById(
@@ -1458,7 +1559,17 @@ formulario.addEventListener(
                     ".descripcion-item"
                 ).value;
 
+            const precioItemTexto =
+                item.querySelector(
+                    ".precio-item"
+                ).value;
 
+            const precioItem =
+                precioItemTexto
+                    ? Number(
+                        precioItemTexto.replace(/\./g, "")
+                    )
+                    : null;
             // Si este bloque no tiene imagen,
             // simplemente lo ignoramos.
 
@@ -1500,8 +1611,10 @@ formulario.addEventListener(
                     imagenBase64,
 
                 descripcion:
-                    descripcionItem
+                    descripcionItem,
 
+                precio:
+                    precioItem,
             });
 
         }
@@ -1542,8 +1655,10 @@ formulario.addEventListener(
                         titulo: titulo,
                         categoria: categoria,
                         precio: precio,
+                        precioPorItem: precioPorItem,
+                        precioNegociable: precioNegociable,
                         descripcion: descripcion,
-                        productos: productos
+                        productos: productos,
                     }
                 );
 
@@ -1610,6 +1725,12 @@ formulario.addEventListener(
 
                         precio:
                             precio,
+
+                        precioPorItem:
+                            precioPorItem,
+
+                        precioNegociable:
+                            precioNegociable,
 
                         descripcion:
                             descripcion,
