@@ -325,7 +325,270 @@
     const db =
         getFirestore(app);
 
+    function abrirDetalle(
+    publicacion,
+    tarjeta
+)
 
+{
+
+    // ==============================
+    // PREPARAR PRODUCTOS
+    // ==============================
+
+    let productos = [];
+
+    if (
+        publicacion.productos &&
+        publicacion.productos.length > 0
+    ) {
+
+        productos =
+            publicacion.productos;
+
+    }
+
+    // Compatibilidad con publicaciones antiguas
+
+    else if (publicacion.imagen) {
+
+        productos = [
+            {
+                imagen:
+                    publicacion.imagen,
+
+                descripcion:
+                    ""
+            }
+        ];
+
+    }
+
+
+    let indiceActual = 0;
+
+
+    // ==============================
+    // CLONAR TARJETA
+    // ==============================
+
+    const tarjetaClon =
+        tarjeta.cloneNode(true);
+
+
+    detalleContenido.innerHTML =
+        "";
+
+
+    detalleContenido.appendChild(
+        tarjetaClon
+    );
+
+
+    // ==============================
+    // ELEMENTOS DEL MODAL
+    // ==============================
+
+    const imagenContenedor =
+        tarjetaClon.querySelector(
+            ".card-image"
+        );
+
+
+    const imagen =
+        imagenContenedor.querySelector(
+            "img"
+        );
+
+
+    const descripcionGeneral =
+        tarjetaClon.querySelector(
+            ".card-description"
+        );
+
+
+    // ==============================
+    // DESCRIPCIÓN DEL ITEM
+    // ==============================
+
+    const descripcionItem =
+        document.createElement("div");
+
+    descripcionItem.classList.add(
+        "descripcion-item-modal"
+    );
+
+
+    descripcionGeneral.parentNode.insertBefore(
+        descripcionItem,
+        descripcionGeneral
+    );
+
+
+    // ==============================
+    // CONTROLES
+    // ==============================
+
+    const botonAnterior =
+        document.createElement("button");
+
+    botonAnterior.classList.add(
+        "flecha-galeria",
+        "flecha-anterior"
+    );
+
+    botonAnterior.textContent =
+        "‹";
+
+
+    const botonSiguiente =
+        document.createElement("button");
+
+    botonSiguiente.classList.add(
+        "flecha-galeria",
+        "flecha-siguiente"
+    );
+
+    botonSiguiente.textContent =
+        "›";
+
+
+    const contador =
+        document.createElement("div");
+
+    contador.classList.add(
+        "contador-galeria"
+    );
+
+
+    imagenContenedor.appendChild(
+        botonAnterior
+    );
+
+    imagenContenedor.appendChild(
+        botonSiguiente
+    );
+
+    imagenContenedor.appendChild(
+        contador
+    );
+
+
+    // ==============================
+    // ACTUALIZAR GALERÍA
+    // ==============================
+
+    function actualizarGaleria() {
+
+        const producto =
+            productos[indiceActual];
+
+
+        imagen.src =
+            producto.imagen;
+
+
+        descripcionItem.textContent =
+            producto.descripcion || "";
+
+
+        contador.textContent =
+            (indiceActual + 1) +
+            " / " +
+            productos.length;
+
+
+        // Si solo existe una imagen,
+        // ocultamos las flechas.
+
+        if (productos.length <= 1) {
+
+            botonAnterior.style.display =
+                "none";
+
+            botonSiguiente.style.display =
+                "none";
+
+        }
+
+        else {
+
+            botonAnterior.style.display =
+                "flex";
+
+            botonSiguiente.style.display =
+                "flex";
+
+        }
+
+    }
+
+
+    // ==============================
+    // IMAGEN ANTERIOR
+    // ==============================
+
+    botonAnterior.addEventListener(
+        "click",
+        (evento) => {
+
+            evento.stopPropagation();
+
+            indiceActual--;
+
+            if (
+                indiceActual < 0
+            ) {
+
+                indiceActual =
+                    productos.length - 1;
+
+            }
+
+            actualizarGaleria();
+
+        }
+    );
+
+
+    // ==============================
+    // IMAGEN SIGUIENTE
+    // ==============================
+
+    botonSiguiente.addEventListener(
+        "click",
+        (evento) => {
+
+            evento.stopPropagation();
+
+            indiceActual++;
+
+            if (
+                indiceActual >=
+                productos.length
+            ) {
+
+                indiceActual = 0;
+
+            }
+
+            actualizarGaleria();
+
+        }
+    );
+
+
+    // Mostrar primera imagen
+
+    actualizarGaleria();
+
+
+    // Abrir modal
+
+    modalDetalle.style.display =
+        "flex";
+
+}
     async function cargarPublicacionesAutorizadas() {
 
         const consulta =
@@ -360,20 +623,6 @@
             const tarjeta = document.createElement("article");
             tarjeta.classList.add("card");
             tarjeta.dataset.category = publicacion.categoria;
-            tarjeta.addEventListener("click", (evento) => {
-
-                if (evento.target.closest("button")) {
-                    return;
-                }
-
-                const tarjetaClon = tarjeta.cloneNode(true);
-
-                detalleContenido.innerHTML = "";
-
-                detalleContenido.appendChild(tarjetaClon);
-
-                modalDetalle.style.display = "flex";
-            });
 
             // ==============================
             // IMAGEN
@@ -382,15 +631,19 @@
             const cardImage = document.createElement("div");
             cardImage.classList.add("card-image");
 
-            if (publicacion.imagen) {
+            let imagenPrincipal = null;
 
-                const foto = document.createElement("img");
+            // Publicación nueva
+            if (
+                publicacion.productos &&
+                publicacion.productos.length > 0
+             ) {
 
-                foto.src = publicacion.imagen;
-                foto.alt = publicacion.titulo;
+                imagenPrincipal =
+                    publicacion.productos[0].imagen;
 
-                cardImage.appendChild(foto);
-            }
+                }
+
 
 
             // ==============================
@@ -524,48 +777,44 @@
     const cerrarDetalle = 
     document.getElementById( "cerrar-detalle" );
 
+
+
     // ==============================
     // ABRIR DETALLE
     // ==============================
 
-    document.addEventListener(
+    tarjeta.addEventListener(
         "click",
         (evento) => {
 
-            const card =
-                evento.target.closest(".card");
-
-
-            if (!card) {
-                return;
-            }
-
-
             if (
-                evento.target.closest("button")
+                evento.target.closest("a")
             ) {
                 return;
             }
 
-
-            const tarjetaClon =
-                card.cloneNode(true);
-
-
-            detalleContenido.innerHTML =
-                "";
-
-
-            detalleContenido.appendChild(
-                tarjetaClon
+            abrirDetalle(
+                publicacion,
+                tarjeta
             );
-
-
-            modalDetalle.style.display =
-                "flex";
 
         }
     );
+
+
+    // ==============================
+    // INSERTAR EN LA PÁGINA
+    // ==============================
+
+    const contenedor =
+        document.getElementById(
+            "contenedor-publicaciones"
+        );
+
+    contenedor.appendChild(
+        tarjeta
+    );
+    
 
     // ==============================
     // CERRAR CON X
