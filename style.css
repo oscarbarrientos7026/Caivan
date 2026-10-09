@@ -568,32 +568,33 @@
     object-fit: cover;
 }
 
+
 .modal-detalle .card-content {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
 }
-.modal-detalle .card-description {
-    min-height: 120px;
-    max-height: 250px;
 
+.modal-detalle .card-description {
+    min-height: 0;
+    max-height: 250px;
+    flex: 1 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
-
     padding-right: 10px;
     white-space: pre-line;
 }
 
 .modal-detalle .card-footer {
     background: white;
-
     border-top: 1px solid #eee;
-
     flex-shrink: 0;
-
     position: relative;
     z-index: 5;
 }
+
 .controles-galeria {
     display: flex;
     align-items: center;
