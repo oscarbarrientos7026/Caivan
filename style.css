@@ -488,8 +488,11 @@
    TARJETA DE DETALLE
 ========================= */
 
+
 .detalle-card {
     position: relative;
+    display: flex;
+    flex-direction: column;
 
     width: 90%;
     max-width: 700px;
@@ -500,9 +503,9 @@
 
     overflow: hidden;
 
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
+
 
 
 /* =========================
@@ -545,11 +548,11 @@
 /* =========================
    CONTENIDO
 ========================= */
-
+/*
 .detalle-contenido {
     width: 100%;
     overflow: hidden;
-}
+}*/
 
 
 
@@ -568,7 +571,7 @@
     object-fit: cover;
 }
 
-
+/*
 .modal-detalle .card-content {
     display: flex;
     flex-direction: column;
@@ -593,6 +596,43 @@
     flex-shrink: 0;
     position: relative;
     z-index: 5;
+}
+*/
+
+.detalle-contenido {
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.detalle-contenido > .card {
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.detalle-contenido .card-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.modal-detalle .card-description {
+    min-height: 0;
+    max-height: 250px;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    white-space: pre-line;
+}
+
+.modal-detalle .card-footer {
+    flex-shrink: 0;
 }
 
 .controles-galeria {
