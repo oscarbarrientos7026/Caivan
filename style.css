@@ -558,7 +558,7 @@
 .detalle-contenido .card-image img {
     width: auto;
     height: 100%;
-    object-fit: cover;
+    object-fit: content;
     overflow-x: scroll;
 }
 
