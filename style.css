@@ -545,16 +545,6 @@
 }
 
 
-/* =========================
-   CONTENIDO
-========================= */
-/*
-.detalle-contenido {
-    width: 100%;
-    overflow: hidden;
-}*/
-
-
 
 /* =========================
    IMAGEN DEL DETALLE
@@ -566,38 +556,11 @@
 }
 
 .detalle-contenido .card-image img {
-    /*width: 100%;*/
+    width: auto;
     height: 100%;
     object-fit: cover;
 }
 
-/*
-.modal-detalle .card-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-}
-
-.modal-detalle .card-description {
-    min-height: 0;
-    max-height: 250px;
-    flex: 1 1 auto;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-right: 10px;
-    white-space: pre-line;
-}
-
-.modal-detalle .card-footer {
-    background: white;
-    border-top: 1px solid #eee;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 5;
-}
-*/
 
 .detalle-contenido {
     width: 100%;
