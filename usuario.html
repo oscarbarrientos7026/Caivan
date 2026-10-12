@@ -46,7 +46,9 @@
             margin-top: 20px;
             max-width: 500px;
         }
-
+        .contenedor-opcional {
+            border: 2px solid #000;
+        }
     </style>
 
 </head>
@@ -214,7 +216,6 @@
         </label>
 
         <div id="contenedor-items">
-
             <div class="item-publicacion">
 
                 <input
@@ -222,27 +223,27 @@
                     class="imagen-item"
                     accept="image/*"
                 >
+                <div class="contenedor-opcional">
+                    <input
+                        type="text"
+                        class="descripcion-item"
+                        placeholder="Breve descripción de ítem"
+                    >
+                    <input
+                        type="text"
+                        class="precio-item"
+                        placeholder="Precio del ítem"
+                    >
 
-                <input
-                    type="text"
-                    class="descripcion-item"
-                    placeholder="Breve descripción de ítem"
-                >
-                <input
-                    type="text"
-                    class="precio-item"
-                    placeholder="Precio del ítem"
-                >
+                    <button
+                        type="button"
+                        id="agregar-item"
+                    >
+                        + Agregar imágen/item
+                    </button>
+                </div>
             </div>
-
         </div>
-
-        <button
-            type="button"
-            id="agregar-item"
-        >
-            + Agregar más items
-        </button>
 
         <br>
         <h3>
