@@ -863,26 +863,27 @@ async function cargarPublicaciones() {
         // MOSTRAR IMAGEN O ICONO
         // ==============================
 
-        if (publicacion.imagen) {
+
+        if (
+            publicacion.productos &&
+            publicacion.productos.length > 0 &&
+            publicacion.productos[0].imagen
+        ) {
 
             const foto =
                 document.createElement("img");
 
             foto.src =
-                publicacion.imagen;
+                publicacion.productos[0].imagen;
 
             foto.alt =
                 publicacion.titulo;
 
-            cardImage.appendChild(
-                foto
-            );
+            cardImage.appendChild(foto);
 
         } else {
 
-            cardImage.appendChild(
-                icono
-            );
+            cardImage.appendChild(icono);
 
         }
 
