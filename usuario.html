@@ -57,7 +57,12 @@
             padding: 10px;  
             max-width: 600px;
             max-height: 65px;
-            border-radius: 4px;
+            border-radius: 5px;
+        }
+        .contenedor-opciones-precio{
+            border: 2px solid #000;
+            padding: 10px;
+            max-width: 500px;
         }
     </style>
 
@@ -316,23 +321,23 @@
             id="precio"
             placeholder="Ej: 35.000"
         >
+        <div class="contenedor-opciones-precio"> *Opcional
+            <div class="opcion-precio">
+                <input
+                    type="checkbox"
+                    id="precio-por-item"
+                >
+                <p>Precio según ítem</p>
+            </div>
 
-        <div class="opcion-precio">
-            <input
-                type="checkbox"
-                id="precio-por-item"
-            >
-            <p>Precio según ítem</p>
+            <div class="opcion-precio">
+                <input
+                    type="checkbox"
+                    id="precio-negociable"
+                >
+                <p>Precio negociable</p>
+            </div>
         </div>
-
-        <div class="opcion-precio">
-            <input
-                type="checkbox"
-                id="precio-negociable"
-            >
-            <p>Precio negociable</p>
-        </div>
-
 
         <h3>
             Descripción
