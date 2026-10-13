@@ -200,8 +200,31 @@ async function cargarPublicacionesPendientes() {
             imagen.classList.add(
                 "card-image"
             );
+            
+            if (
+                publicacion.productos &&
+                publicacion.productos.length > 0 &&
+                publicacion.productos[0].imagen
+            ) {
 
+                const foto =
+                    document.createElement("img");
 
+                foto.src =
+                    publicacion.productos[0].imagen;
+
+                foto.alt =
+                    publicacion.titulo;
+
+                cardImage.appendChild(foto);
+
+            } else {
+
+                cardImage.appendChild(icono);
+
+            }
+
+            /*
             if (
                 publicacion.imagen
             ) {
@@ -229,7 +252,7 @@ async function cargarPublicacionesPendientes() {
                 imagen.textContent =
                     "Sin imagen";
 
-            }
+            } */
 
 
             // ==============================
