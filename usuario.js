@@ -1186,7 +1186,7 @@ formulario.addEventListener(
                 item.querySelector(
                     ".imagen-item"
                 ).files[0];
-
+/*
             const descripcionItem =
                 item.querySelector(
                     ".descripcion-item"
@@ -1205,7 +1205,7 @@ formulario.addEventListener(
                     : null;
             // Si este bloque no tiene imagen,
             // simplemente lo ignoramos.
-
+*/
             if (!archivo) {
                 continue;
             }
@@ -1242,12 +1242,13 @@ formulario.addEventListener(
 
                 imagen:
                     imagenBase64,
-
+                /*
                 descripcion:
                     descripcionItem,
 
                 precio:
                     precioItem,
+                */
             });
 
         }
