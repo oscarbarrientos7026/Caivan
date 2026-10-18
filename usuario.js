@@ -713,7 +713,7 @@ botonAgregarItem.addEventListener(
                 class="imagen-item"
                 accept="image/*"
             >
-
+            <!--
             <input
                 type="text"
                 class="descripcion-item"
@@ -725,6 +725,7 @@ botonAgregarItem.addEventListener(
                 class="precio-item"
                 placeholder="Precio del ítem"
             >
+            -->
         `;
         document.addEventListener(
             "input",
