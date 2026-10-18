@@ -573,7 +573,7 @@
 .detalle-contenido > .card {
     display: flex;
     flex-direction: column;
-    height: 90vh;
+    height: 85vh;
     /*
     max-height: 90vh;
     min-height: 0;*/
