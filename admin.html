@@ -50,7 +50,7 @@
     </main>
 
 
-    <script type="module">
+<script type="module">
 
     // ==============================
     // FIREBASE
@@ -203,34 +203,22 @@ async function cargarPublicacionesPendientes() {
             
 
             
+            
             if (
-                publicacion.imagen
+                publicacion.productos &&
+                publicacion.productos.length > 0 &&
+                publicacion.productos[0].imagen
             ) {
+                const foto = document.createElement("img");
 
-                const foto =
-                    document.createElement(
-                        "img"
-                    );
+                foto.src = publicacion.productos[0].imagen;
+                foto.alt = publicacion.productos[0].descripcion || publicacion.titulo;
 
-
-                foto.src =
-                    publicacion.imagen;
-
-
-                foto.alt =
-                    publicacion.titulo;
-
-
-                imagen.appendChild(
-                    foto
-                );
-
+                imagen.appendChild(foto);
             } else {
+                imagen.textContent = "Sin imagen";
+            }
 
-                imagen.textContent =
-                    "Sin imagen";
-
-            } 
 
 
             // ==============================
