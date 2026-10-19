@@ -190,7 +190,7 @@ async function cargarPublicacionesPendientes() {
             // ==============================
             // IMAGEN
             // ==============================
-            
+            /*
             const imagen =
                 document.createElement(
                     "div"
@@ -218,7 +218,45 @@ async function cargarPublicacionesPendientes() {
             } else {
                 imagen.textContent = "Sin imagen";
             }
-             
+             */
+            
+            console.log("Publicación:", publicacion.titulo);
+            console.log("Campos disponibles:", Object.keys(publicacion));
+            console.log("Productos:", publicacion.productos);
+
+            const imagen = document.createElement("div");
+            imagen.classList.add("card-image");
+
+            // Intentamos obtener la imagen de la estructura actual.
+            const imagenGuardada =
+                publicacion.productos?.[0]?.imagen
+                || publicacion.imagen;
+
+            if (imagenGuardada) {
+                console.log(
+                    "Imagen encontrada. Tipo:",
+                    imagenGuardada.substring(0, 30)
+                );
+
+                const foto = document.createElement("img");
+                foto.src = imagenGuardada;
+                foto.alt = publicacion.titulo || "Imagen de publicación";
+
+                foto.onload = () => {
+                    console.log("Imagen cargada correctamente:", publicacion.titulo);
+                };
+
+                foto.onerror = () => {
+                    console.error("No se pudo cargar la imagen:", publicacion.titulo);
+                    imagen.textContent = "Error al cargar la imagen";
+                };
+
+                imagen.appendChild(foto);
+            } else {
+                console.warn("La publicación no contiene una imagen:", publicacion.titulo);
+                imagen.textContent = "Sin imagen guardada";
+            }
+
             
 
             // ==============================
