@@ -1399,7 +1399,7 @@ formulario.addEventListener(
 
 
             mensaje.textContent =
-                "¡Publicación creada correctamente!";
+                "¡Publicación creada correctamente!... Considera un tiempo de revisión, lo hacemos para evitar la publicación de contenido censurable";
 
 
             formulario.reset();
